@@ -1,0 +1,61 @@
+DOCTORVET AI - ANDROID PHONE SE HOST KARNE KA TAREEQA (PC ZAROORI NAHI)
+=====================================================================
+
+BUNYADI BAAT
+- Ye setup sirf AAP (app owner) ko EK DAFA karna hai.
+- Kisan / users ko sirf ek https link milega. Woh Chrome mein link khol kar
+  "Install app" (ya 3 dots -> Add to Home screen) dabayenge, aur app phone
+  mein install ho jayegi. Unhein koi PC, WiFi setup ya IP nahi chahiye.
+- Is folder mein pehle se sab kuch ek saath hai: backend + app + install
+  files. Backend hi app ko serve karta hai, isliye sirf ek link hoga.
+
+PEHLE: GEMINI API KEY
+1. Chrome mein aistudio.google.com kholein, Google account se login karein.
+2. "Get API key" -> "Create API key". Key copy kar lein (kisi ko na dein).
+   Note: free key ki daily limits hoti hain. Zyada users hon to billing lagti hai.
+3. ZAROORI (Sept 2026 update): Google ne purani "standard" keys band karna
+   shuru kar di hain. Agar aap ki key MAI/JUNE 2026 se pehle ki bani hui hai,
+   naye sirey se "Create API key" karein - nayeban ne wali key khud-ba-khud
+   "auth key" hoti hai jo chalti rahegi. Agar Test button "API online" to
+   bataye lekin Analyze har dafa fail ho, to sab se pehle yehi wajah check
+   karein - naya key bana kar dobara try karein.
+
+TAREEQA A: HUGGING FACE SPACES (phone se sab se aasan - GitHub nahi chahiye)
+1. huggingface.co par free account banayein.
+2. "New Space" banayein:
+   - Space name: doctorvet-ai
+   - SDK: Docker -> Blank
+   - Visibility: Public (Private ho to doosre log link nahi khol sakenge)
+3. Files tab -> "Add file" -> "Upload files".
+   Zip ko pehle phone mein extract karein (Files by Google se), phir in SAB
+   files ko upload karein (folder ke andar wali):
+     main.py, knowledge_base.py, index.html, manifest.json, sw.js,
+     icon-192.png, icon-512.png, requirements.txt, Dockerfile, README.md
+   (render.yaml sirf Render ke liye hai, yahan zaroori nahi.)
+   "Commit changes" dabayein.
+4. Space ki Settings -> "Variables and secrets" -> "New secret":
+     GEMINI_API_KEY      = (aap ki key)
+     DOCTORVET_ACCESS_CODE = koi code jaise  kisan2026   (SIFAARISH: is se
+                           koi bhi random banda aap ki key istemal nahi kar sakega)
+5. Build ho jane dein (kuch minute). Phir link hoga:
+     https://AAP-KA-USERNAME-doctorvet-ai.hf.space
+6. Us link ko Chrome mein kholein -> "Backend Connection" mein Test dabayein.
+   "API online" aana chahiye. Access code wala box mein apna code likhein.
+7. Chrome 3 dots -> "Install app" / "Add to Home screen". Ho gaya!
+   Ye link + code apne kisanon ko WhatsApp par bhej dein.
+
+TAREEQA B: RENDER.COM (agar GitHub account ho)
+1. Files ko ek GitHub repository mein upload karein.
+2. render.com -> New -> Blueprint (ya Web Service) -> apni repo chunein.
+3. Environment variables mein GEMINI_API_KEY (aur DOCTORVET_ACCESS_CODE) daalein.
+4. Deploy ke baad milne wala https link app ka link hai.
+   Free plan par server kuch der baad so jata hai, pehli dafa 30-60 second lag sakte hain.
+
+ZAROORI HIDAYAT
+- Free hosting ki shartein badalti rehti hain; sign-up par khud dekh lein.
+- Users ki tadaad barhe to Gemini key ka kharcha aap ke account par aata hai.
+  ACCESS CODE lagayein aur Google AI Studio mein usage dekhte rahein.
+- Backend ko key ke bagair mat chalayein: Test dabane par "Gemini key NOT set"
+  likha aaye to secret dobara check karein.
+- App sirf dawa/tashkhees mein madad ka zariya hai; kisan ko hamesha licensed
+  vet se confirm karne ki hidayat app khud deti hai.

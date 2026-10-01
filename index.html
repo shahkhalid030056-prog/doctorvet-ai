@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#0b6b57">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DoctorVet AI">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>DoctorVet AI — Veterinary Intelligence</title>
+
+<style>
+:root{
+  --card:#ffffff;
+  --text:#10201c;
+  --muted:#64756f;
+  --primary:#0b6b57;
+  --primary2:#0e8a70;
+  --border:#dce8e4;
+  --danger:#b42318;
+  --warning:#b25e09;
+  --success:#08614e;
+  --shadow:0 14px 45px rgba(16,32,28,.09);
+  --radius:20px;
+}
+
+html[data-theme="dark"]{
+  --card:#132420;
+  --text:#e8f4f0;
+  --muted:#8fa39d;
+  --border:#1f3a33;
+  --shadow:0 14px 45px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  background:linear-gradient(180deg,#edf8f4 0,#f7faf9 42%,#f4f7f6 100%);
+  color:var(--text);
+  min-height:100vh;
+  transition:background .3s,color .3s;
+}
+
+html[data-theme="dark"] body{
+  background:linear-gradient(180deg,#0a1714 0,#0d1e1a 42%,#0a1714 100%);
+}
+
+header{
+  background:#082f27;
+  color:#fff;
+  padding:16px 20px;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 5px 20px rgba(0,0,0,.13);
+}
+
+.nav{
+  max-width:1180px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+}
+
+.brand{display:flex;align-items:center;gap:12px}
+
+.logo{
+  width:44px;height:44px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#16a37f,#73dfba);
+  display:grid;place-items:center;
+  font-size:24px;
+  box-shadow:0 8px 22px rgba(0,0,0,.2);
+  flex:none;
+}
+
+.brand h1{font-size:19px;margin:0;line-height:1.2}
+.brand small{color:#b9d8d0;font-size:11px}
+
+.headerRight{display:flex;gap:8px;align-items:center}
+
+.status{
+  font-size:11px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.13);
+  padding:7px 11px;
+  border-radius:999px;
+  white-space:nowrap;
+  cursor:pointer;
+  transition:.2s;
+  color:#fff;
+}
+
+.status:hover{background:rgba(255,255,255,.15)}
+.status.online{background:rgba(22,163,127,.25);border-color:#16a37f}
+.status.offline{background:rgba(180,35,24,.25);border-color:#b42318}
+
+.iconBtn{
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.13);
+  color:#fff;
+  width:38px;height:38px;
+  border-radius:11px;
+  cursor:pointer;
+  font-size:17px;
+  display:grid;place-items:center;
+  transition:.2s;
+  font-family:inherit;
+}
+
+.iconBtn:hover{background:rgba(255,255,255,.18)}
+
+main{max-width:1180px;margin:28px auto;padding:0 18px}
+
+.offlineBanner{
+  display:none;
+  max-width:1180px;
+  margin:0 auto 16px;
+  padding:12px 16px;
+  border-radius:13px;
+  background:#fff3e6;
+  color:var(--warning);
+  border:1px solid #ffdfb3;
+  font-size:13px;
+  font-weight:700;
+  text-align:center;
+}
+
+.hero{
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:20px;
+  align-items:stretch;
+}
+
+.heroText,.heroCard,.panel{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}
+
+.heroText{padding:32px}
+
+.eyebrow{
+  color:var(--primary2);
+  font-weight:800;
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+}
+
+.hero h2{font-size:clamp(28px,5vw,52px);line-height:1.05;margin:10px 0 16px}
+.hero p{color:var(--muted);font-size:16px;line-height:1.65;max-width:720px}
+
+.heroCard{padding:24px;background:linear-gradient(145deg,#083d32,#0b6b57);color:#fff}
+.heroCard h3{margin-top:0;font-size:16px}
+
+.feature{display:flex;gap:11px;margin:13px 0;color:#d8f5ec;font-size:13px;align-items:flex-start}
+.check{width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,.11);display:grid;place-items:center;flex:none;font-size:11px}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.panel{padding:22px}
+.panel h3{margin:0 0 5px;font-size:17px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+
+.drop{
+  border:2px dashed #b9d8d0;
+  border-radius:18px;
+  padding:32px 18px;
+  text-align:center;
+  background:#f8fcfb;
+  cursor:pointer;
+  transition:.2s;
+  display:block;
+}
+
+html[data-theme="dark"] .drop{background:#0d1e1a}
+.drop:hover,.drop.drag{border-color:var(--primary2);background:#effaf6}
+html[data-theme="dark"] .drop:hover,html[data-theme="dark"] .drop.drag{background:#132420}
+.drop strong{display:block;font-size:17px;margin-bottom:7px}
+.drop span{color:var(--muted);font-size:12px}
+.drop input{display:none}
+
+.preview{margin-top:14px;display:none}
+.preview.multi{grid-template-columns:repeat(2,1fr);gap:8px}
+.preview.multi img,.preview.multi video{max-height:160px}
+.thumb{position:relative}
+.thumbX{position:absolute;top:6px;right:6px;width:26px;height:26px;border:0;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;font-size:15px;cursor:pointer;line-height:1;display:grid;place-items:center}
+.rx-urdu-script{direction:rtl;text-align:right;font-family:'Noto Nastaliq Urdu','Jameel Noori Nastaleeq','Alvi Nastaleeq','Segoe UI',Tahoma,serif;font-size:17px;line-height:2.3;background:#f8fbfa;border:1px solid var(--border);border-radius:12px;padding:14px 16px}
+html[data-theme="dark"] .rx-urdu-script{background:#0d1e1a}
+.histRow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.histRow input{width:100%;padding:11px;border:1px solid var(--border);border-radius:12px;font-size:13px;background:var(--card);color:var(--text);font-family:inherit}
+.histRow label{display:block;font-size:10px;font-weight:700;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.preview img,.preview video{width:100%;max-height:320px;object-fit:contain;border-radius:14px;background:#071814}
+
+.fileinfo{margin-top:10px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+.compress-badge{
+  background:#e9f7f2;color:#08715a;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:700;display:none;
+}
+
+html[data-theme="dark"] .compress-badge{background:#0f2a22;color:#a8e0cd}
+
+.btn{
+  width:100%;border:0;border-radius:14px;padding:15px 18px;font-size:15px;font-weight:800;
+  cursor:pointer;margin-top:14px;
+  background:linear-gradient(135deg,var(--primary),var(--primary2));
+  color:#fff;box-shadow:0 9px 25px rgba(11,107,87,.2);transition:.2s;font-family:inherit;
+}
+
+.btn:hover:not(:disabled){transform:translateY(-1px)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.secondary{background:#edf5f2;color:#0b5d4d;box-shadow:none}
+html[data-theme="dark"] .secondary{background:#1a332c;color:#a8e0cd}
+
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.btn-row .btn{margin-top:0}
+
+.settings{display:flex;gap:10px;align-items:center;margin-top:14px}
+.settings input{flex:1;padding:12px;border:1px solid var(--border);border-radius:12px;font-family:inherit;font-size:13px;background:var(--card);color:var(--text)}
+
+.alert{display:none;padding:13px 15px;border-radius:13px;margin-top:14px;font-size:13px;line-height:1.5}
+.error{background:#fff1f0;color:var(--danger);border:1px solid #ffd4d0}
+.success{background:#edf9f4;color:var(--success);border:1px solid #c8eadf}
+.warning{background:#fff8e6;color:var(--warning);border:1px solid #f5e0a8}
+html[data-theme="dark"] .error{background:#2a1412;border-color:#5a2018}
+html[data-theme="dark"] .success{background:#0f2a22;border-color:#1d4a3a}
+html[data-theme="dark"] .warning{background:#2a2010;border-color:#5a4020}
+
+.selectRow{margin-top:14px}
+.selectRow label{display:block;font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.selectRow select,.selectRow input{width:100%;padding:12px;border:1px solid var(--border);border-radius:12px;font-size:14px;background:var(--card);color:var(--text);font-family:inherit}
+
+.focusBanner{
+  display:none;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:11px 14px;
+  border-radius:12px;background:#eef8f5;border:1px solid #cfe9df;font-size:12px;color:#0b5d4d;font-weight:700;
+}
+html[data-theme="dark"] .focusBanner{background:#0f2a22;border-color:#1d4a3a;color:#a8e0cd}
+.focusBanner button{border:0;background:var(--card);color:#0b5d4d;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit}
+
+.progressWrap{display:none;margin-top:14px;background:#e8f4f0;border-radius:10px;overflow:hidden;height:8px}
+html[data-theme="dark"] .progressWrap{background:#1a332c}
+.progressBar{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));width:0%;transition:width .2s}
+
+.result{margin-top:20px}
+.resultBox{white-space:pre-wrap;line-height:1.7;background:#f8fbfa;border:1px solid var(--border);border-radius:16px;padding:20px;min-height:150px;font-size:14px;font-family:inherit;word-break:break-word}
+html[data-theme="dark"] .resultBox{background:#0d1e1a}
+
+.loading{display:none;text-align:center;padding:28px}
+.spinner{width:38px;height:38px;border:4px solid #cfe4de;border-top-color:var(--primary);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.reportHeader{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.reportActions{display:flex;gap:8px}
+.smallBtn{
+  border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:9px;padding:7px 11px;
+  font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;
+}
+.smallBtn:hover{border-color:var(--primary2)}
+
+.badge{padding:6px 10px;border-radius:999px;background:#e7f6f0;color:#09644f;font-size:11px;font-weight:800;white-space:nowrap}
+html[data-theme="dark"] .badge{background:#0f2a22;color:#a8e0cd}
+
+.note{font-size:11px;color:var(--muted);line-height:1.55;margin-top:14px}
+
+.confidenceWrap{display:none;margin-bottom:14px;padding:14px;background:#f8fbfa;border:1px solid var(--border);border-radius:14px}
+html[data-theme="dark"] .confidenceWrap{background:#0d1e1a}
+.confidenceLabel{display:flex;justify-content:space-between;font-size:12px;font-weight:800;margin-bottom:8px}
+.confidenceTrack{height:10px;background:#e0ede9;border-radius:999px;overflow:hidden}
+html[data-theme="dark"] .confidenceTrack{background:#1a332c}
+.confidenceFill{height:100%;border-radius:999px;transition:width 1s ease-out,background .3s;width:0%}
+.conf-high{background:linear-gradient(90deg,#0e8a70,#16a37f)}
+.conf-mid{background:linear-gradient(90deg,#e0a800,#f0c419)}
+.conf-low{background:linear-gradient(90deg,#d97706,#f59e0b)}
+
+.severityBadge{display:none;align-items:center;gap:8px;padding:11px 15px;border-radius:13px;font-weight:800;font-size:13px;margin-bottom:14px}
+.sev-critical{background:#fdeceb;color:#b42318;border:1px solid #f6c6c1}
+.sev-high{background:#fff3e6;color:#b25e09;border:1px solid #ffdfb3}
+.sev-moderate{background:#fff9e0;color:#8a6d00;border:1px solid #f5e7a3}
+.sev-low{background:#edf9f4;color:#08614e;border:1px solid #c8eadf}
+html[data-theme="dark"] .sev-critical{background:#2a1412;border-color:#5a2018;color:#f87171}
+html[data-theme="dark"] .sev-high{background:#2a2010;border-color:#5a4020;color:#fbbf24}
+html[data-theme="dark"] .sev-moderate{background:#2a2810;border-color:#5a5520;color:#facc15}
+html[data-theme="dark"] .sev-low{background:#0f2a22;border-color:#1d4a3a;color:#a8e0cd}
+
+/* PRESCRIPTION CARD */
+.rx{display:none;border:1px solid var(--border);border-radius:16px;overflow:hidden;background:var(--card)}
+.rx-head{
+  background:linear-gradient(135deg,#083d32,#0b6b57);color:#fff;padding:18px 20px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+}
+.rx-head .rx-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px}
+.rx-head .rx-meta{font-size:11px;color:#d8f5ec;text-align:right}
+.rx-body{padding:20px}
+.rx-section{margin-bottom:18px}
+.rx-section:last-child{margin-bottom:0}
+.rx-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:8px}
+.rx-diagnosis{
+  background:#f8fbfa;border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:15px;font-weight:700;
+}
+html[data-theme="dark"] .rx-diagnosis{background:#0d1e1a}
+.rx-indeterminate{color:var(--warning)}
+.rx-list{margin:0;padding-left:18px;font-size:13px;line-height:1.7;color:var(--text)}
+.rx-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.rx-table th{
+  text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);
+  padding:6px 8px;border-bottom:2px solid var(--border);
+}
+.rx-table td{padding:9px 8px;border-bottom:1px solid var(--border);vertical-align:top}
+.rx-redflags{
+  background:#fdeceb;border:1px solid #f6c6c1;border-radius:12px;padding:14px 16px;font-size:13px;color:#7a1810;
+}
+html[data-theme="dark"] .rx-redflags{background:#2a1412;border-color:#5a2018;color:#f87171}
+.rx-redflags ul{margin:6px 0 0;padding-left:18px}
+.rx-alert{border-radius:12px;padding:12px 14px;font-size:13px;font-weight:700;margin-bottom:10px;line-height:1.55}
+.rx-alert.notifiable{background:#fdeceb;border:1px solid #f6c6c1;color:#7a1810}
+.rx-alert.zoonotic{background:#fff3e6;border:1px solid #ffdfb3;color:#8a4a06}
+.rx-alert.safety{background:#fff8e6;border:1px solid #f5e0a8;color:#8a6d00}
+.rx-alert.urgency{background:#eef8f5;border:1px solid #cfe9df;color:#0b5d4d}
+html[data-theme="dark"] .rx-alert.notifiable{background:#2a1412;border-color:#5a2018;color:#f87171}
+html[data-theme="dark"] .rx-alert.zoonotic{background:#2a2010;border-color:#5a4020;color:#fbbf24}
+html[data-theme="dark"] .rx-alert.safety{background:#2a2810;border-color:#5a5520;color:#facc15}
+html[data-theme="dark"] .rx-alert.urgency{background:#0f2a22;border-color:#1d4a3a;color:#a8e0cd}
+.rx-urdu{background:#f8fbfa;border:1px solid var(--border);border-radius:12px;padding:14px 16px;font-size:14px;line-height:1.8}
+html[data-theme="dark"] .rx-urdu{background:#0d1e1a}
+.rx-tablewrap{overflow-x:auto}
+.rx-disclaimer{
+  border-top:1px dashed var(--border);padding-top:14px;font-size:11px;color:var(--muted);line-height:1.6;
+}
+.rx-footer{
+  padding:14px 20px;background:#f8fbfa;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;
+}
+html[data-theme="dark"] .rx-footer{background:#0d1e1a}
+.rx-footer .rx-sign{font-size:11px;color:var(--muted)}
+
+
+.queuePanel{margin-top:14px}
+.queueItem{padding:11px 13px;background:#fff8e6;border:1px solid #f5e0a8;border-radius:12px;font-size:12px;margin-bottom:8px}
+html[data-theme="dark"] .queueItem{background:#2a2010;border-color:#5a4020}
+.queueItem .q-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:4px}
+.queueItem .q-title{font-weight:800;color:var(--warning)}
+.queueItem .q-meta{color:var(--muted);font-size:11px}
+.queueItem .q-actions{display:flex;gap:6px;margin-top:8px}
+.queueItem .q-actions button{flex:1;border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:8px;padding:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit}
+.queueBadge{background:var(--warning);color:#fff;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800}
+.shareBar{display:none;flex-wrap:wrap;gap:8px;margin:0 0 14px;align-items:center}
+.shareBar input{flex:1 1 210px;padding:9px 11px;border:1px solid var(--border);border-radius:9px;font-size:12px;background:var(--card);color:var(--text);font-family:inherit}
+.waBtn{background:#25D366 !important;color:#fff !important;border-color:#25D366 !important}
+#printText{display:none}
+#voiceRow{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+#voiceRow select{flex:1 1 100%;padding:10px;border:1px solid var(--border);border-radius:12px;font-size:13px;background:var(--card);color:var(--text);font-family:inherit}
+#voiceRow .btn{margin-top:0;flex:1 1 45%;width:auto;padding:13px 8px;font-size:13px}
+#voiceBtn.listening,#aiVoiceBtn.listening{background:#b42318;color:#fff}
+#voiceHelp{font-size:11px;color:var(--muted);line-height:1.5;margin-top:6px}
+@media print{
+  body.print-text *{visibility:hidden}
+  body.print-text #printText,body.print-text #printText *{visibility:visible}
+  body.print-text #printText{display:block;position:absolute;top:0;left:0;width:100%;white-space:pre-wrap;font-family:Arial,'Noto Nastaliq Urdu',sans-serif;font-size:12px;line-height:1.7;color:#000;background:#fff;padding:16px}
+  body.print-text .rx{display:none !important}
+  body *{visibility:hidden}
+  .rx,.rx *{visibility:visible}
+  .rx{display:block !important;position:absolute;top:0;left:0;width:100%;border:0;box-shadow:none}
+  .rx-footer{display:none}
+
+  /* Printing must always come out light/readable on paper, even if the app
+     is in dark mode on screen — otherwise it prints a near-black page. */
+  html[data-theme="dark"]{--card:#ffffff;--text:#10201c;--muted:#64756f;--border:#dce8e4;--shadow:none}
+  html[data-theme="dark"] *{background-color:#ffffff !important;color:#10201c !important;border-color:#dce8e4 !important}
+  body{background:#ffffff !important}
+}
+
+.disease-section{margin-top:20px}
+.filterBar{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:6px}
+.filterChip{
+  padding:7px 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);
+  font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;color:var(--muted);transition:.2s;font-family:inherit;flex:none;
+}
+.filterChip.active{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+.disease-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.disease-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:.2s;
+  cursor:pointer;text-align:left;padding:0;font-family:inherit;color:var(--text);
+}
+.disease-card:hover{transform:translateY(-3px);box-shadow:0 15px 35px rgba(16,32,28,.13);border-color:var(--primary2)}
+.disease-card.active{border-color:var(--primary2);box-shadow:0 0 0 3px rgba(14,138,112,.2)}
+.disease-card.filtered-out{display:none}
+.disease-icon{width:100%;height:68px;display:grid;place-items:center;font-size:29px;background:linear-gradient(145deg,#eef8f5,#f8fcfb)}
+html[data-theme="dark"] .disease-icon{background:linear-gradient(145deg,#0d1e1a,#132420)}
+.disease-info{padding:11px}
+.disease-info h4{margin:0 0 4px;font-size:12.5px;color:var(--text);line-height:1.3}
+.disease-info p{margin:0;color:var(--muted);font-size:10.5px;line-height:1.4}
+.disease-tag{display:inline-block;margin-top:7px;padding:3px 7px;border-radius:999px;background:#e9f7f2;color:#08715a;font-size:9px;font-weight:800}
+html[data-theme="dark"] .disease-tag{background:#0f2a22;color:#a8e0cd}
+
+.history-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.history-item{padding:12px 14px;background:#f8fbfa;border:1px solid var(--border);border-radius:12px;font-size:12px;cursor:pointer;transition:.2s}
+html[data-theme="dark"] .history-item{background:#0d1e1a}
+.history-item:hover{border-color:var(--primary2)}
+.history-item .h-date{color:var(--muted);font-size:10px;margin-bottom:4px}
+.history-item .h-title{font-weight:800;margin-bottom:3px;color:var(--primary)}
+.history-item .h-preview{color:var(--muted);font-size:11px;line-height:1.4}
+.history-empty{font-size:12px;color:var(--muted)}
+
+.footer{text-align:center;color:#71817d;font-size:11px;padding:28px 10px 45px;line-height:1.7}
+
+.mt-14{margin-top:14px}
+
+@media(max-width:800px){
+  .hero,.grid{grid-template-columns:1fr}
+  .heroText{padding:24px}
+  .heroCard{padding:20px}
+  main{margin-top:16px;padding:0 14px}
+  .panel{padding:18px}
+  .btn-row{grid-template-columns:1fr}
+  .brand h1{font-size:17px}
+  .brand small{font-size:10px}
+}
+
+@media(max-width:420px){
+  .disease-grid{grid-template-columns:1fr 1fr}
+  .disease-icon{height:58px;font-size:25px}
+}
+
+@media(max-width:380px){
+  .histRow{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="nav">
+<div class="brand">
+<div class="logo">🐾</div>
+<div>
+<h1>DoctorVet AI</h1>
+<small>Veterinary Intelligence Platform</small>
+</div>
+</div>
+<div class="headerRight">
+<div class="status" id="apiStatus">● Check API</div>
+<button type="button" class="iconBtn" id="installBtn" title="Install app" style="display:none">📲</button>
+<button type="button" class="iconBtn" id="themeToggle" title="Dark mode">🌙</button>
+</div>
+</div>
+</header>
+
+<div class="offlineBanner" id="offlineBanner">⚠️ You're offline — tap "📥 Save for Later" instead of Analyze. Saved cases send automatically once you're back online.</div>
+
+<main>
+
+<section class="hero">
+<div class="heroText">
+<div class="eyebrow">AI-assisted veterinary analysis</div>
+<h2>DoctorVet AI</h2>
+<p>Upload an animal photo or video. DoctorVet AI screens for species, disease, severity, and gives a structured treatment report in Roman Urdu/English.</p>
+<button type="button" class="btn" id="heroUploadBtn">🐾 Start Animal Analysis</button>
+</div>
+
+<div class="heroCard">
+<h3>✨ What this build adds</h3>
+<div class="feature"><span class="check">✓</span><span>Species + symptom notes (typed or voice)</span></div>
+<div class="feature"><span class="check">✓</span><span>20+ disease quick-reference with category filters</span></div>
+<div class="feature"><span class="check">✓</span><span>Confidence score bar (parsed from the AI report)</span></div>
+<div class="feature"><span class="check">✓</span><span>Auto image compression before upload</span></div>
+<div class="feature"><span class="check">✓</span><span>Upload progress bar + automatic retry on network failure</span></div>
+<div class="feature"><span class="check">✓</span><span>Copy / download report, last-5 local history</span></div>
+<div class="feature"><span class="check">✓</span><span>Dark mode, offline detection, keyboard shortcuts</span></div>
+</div>
+</section>
+
+<section class="grid">
+
+<div class="panel">
+<h3>1. Animal Evidence</h3>
+<p class="sub">Upload 1-4 clear photos (face/mouth, feet/hooves, skin, whole body help a lot) or one video. Images over 1.5MB are auto-compressed.</p>
+
+<label class="drop" id="drop">
+<input id="fileInput" type="file" multiple accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/avi">
+<strong>📷 Choose up to 4 photos (different angles) or 1 video</strong>
+<span>JPG, PNG, WEBP, MP4, MOV, AVI • Max 20MB</span>
+</label>
+
+<div class="preview" id="preview"></div>
+
+<div class="fileinfo">
+<span id="fileName"></span>
+<span id="fileSize"></span>
+<span id="compressInfo" class="compress-badge"></span>
+</div>
+
+<div class="selectRow">
+<label for="speciesSelect">Species (optional — improves accuracy)</label>
+<select id="speciesSelect">
+<option value="">Auto-detect species</option>
+<optgroup label="Livestock">
+<option value="Cattle">Cattle (Gaay)</option>
+<option value="Buffalo">Buffalo (Bhains)</option>
+<option value="Goat">Goat (Bakri)</option>
+<option value="Sheep">Sheep (Bher)</option>
+<option value="Camel">Camel (Oont)</option>
+<option value="Horse">Horse (Ghora)</option>
+<option value="Donkey">Donkey (Gadha)</option>
+</optgroup>
+<optgroup label="Poultry">
+<option value="Poultry">Poultry (Murgi)</option>
+<option value="Duck">Duck (Batakh)</option>
+</optgroup>
+<optgroup label="Pets">
+<option value="Dog">Dog (Kutta)</option>
+<option value="Cat">Cat (Billi)</option>
+<option value="Rabbit">Rabbit (Khargosh)</option>
+</optgroup>
+<option value="Other">Other</option>
+</select>
+</div>
+
+<div class="selectRow">
+<label>🩺 Clinical history (optional — makes the exam more accurate)</label>
+<div class="histRow">
+<div><label for="ageInput">Age</label><input id="ageInput" type="text" placeholder="e.g., 3 years / 2 months" maxlength="40"></div>
+<div><label for="weightInput">Weight (kg)</label><input id="weightInput" type="number" min="0.1" max="1500" step="0.1" placeholder="e.g., 450"></div>
+<div><label for="tempInput">Temperature (°C)</label><input id="tempInput" type="number" min="30" max="46" step="0.1" placeholder="e.g., 39.5"></div>
+<div><label for="durationInput">Sick since</label><input id="durationInput" type="text" placeholder="e.g., 3 days" maxlength="60"></div>
+<div><label for="bcsSelect">Body Condition Score</label><select id="bcsSelect" style="width:100%;padding:11px;border:1px solid var(--border);border-radius:12px;font-size:13px;background:var(--card);color:var(--text);font-family:inherit"><option value="">Not assessed</option><option value="1 - Very thin / emaciated (ribs, spine very visible)">1 · Very thin</option><option value="2 - Thin (ribs easily felt/visible)">2 · Thin</option><option value="3 - Ideal / moderate condition">3 · Ideal</option><option value="4 - Overweight (ribs hard to feel)">4 · Overweight</option><option value="5 - Obese (ribs not felt, fat deposits)">5 · Obese</option></select></div>
+<div><label for="sexSelect">Sex</label><select id="sexSelect" style="width:100%;padding:11px;border:1px solid var(--border);border-radius:12px;font-size:13px;background:var(--card);color:var(--text);font-family:inherit"><option value="">Unknown</option><option value="male">Male</option><option value="female">Female</option></select></div>
+<div><label for="breedInput">Breed</label><input id="breedInput" type="text" placeholder="e.g., Nili-Ravi, Sahiwal, Marecha" maxlength="60"></div>
+<div style="grid-column:1/-1"><label for="regionInput">Region / Province</label><input id="regionInput" type="text" placeholder="e.g., Peshawar, KPK" maxlength="60"></div>
+</div>
+</div>
+
+<div class="selectRow">
+<label for="symptomInput">📝 Symptoms (optional — type or use voice)</label>
+<input id="symptomInput" type="text" placeholder="e.g., Bukhar, kha nahi raha, lame..." maxlength="300">
+<div id="voiceRow">
+<select id="voiceLang" title="Voice language">
+<option value="ur-PK">اردو (Urdu)</option>
+<option value="en-IN">English (India/Pakistan)</option>
+<option value="hi-IN">हिन्दी (Hindi)</option>
+<option value="en-US">English (US)</option>
+<option value="ps">پښتو (Pashto) — AI Voice only</option>
+</select>
+<button type="button" class="btn secondary" id="voiceBtn">🎤 Voice Input</button>
+<button type="button" class="btn secondary" id="aiVoiceBtn">🎙️ AI Voice</button>
+</div>
+<div id="voiceHelp">🎤 = browser voice typing (Chrome). 🎙️ = record → AI converts to text (works in any browser, Urdu/Pashto/English; needs the backend).</div>
+</div>
+
+<button type="button" class="btn" id="analyzeBtn" disabled>🔬 Analyze with DoctorVet AI</button>
+<button type="button" class="btn secondary" id="saveLaterBtn">📥 Save for Later (send when online)</button>
+<button type="button" class="btn secondary" id="clearBtn" style="display:none">✖ Clear</button>
+
+<div class="progressWrap" id="progressWrap"><div class="progressBar" id="progressBar"></div></div>
+
+<div class="focusBanner" id="focusBanner">
+<span id="focusBannerText"></span>
+<button type="button" id="focusClearBtn">Clear focus</button>
+</div>
+</div>
+
+<div class="panel">
+<h3>2. Backend Connection</h3>
+<p class="sub">Enter your FastAPI server URL.</p>
+
+<div class="settings">
+<input id="apiUrl" value="http://127.0.0.1:8000" placeholder="https://your-server.com" type="url">
+<button type="button" class="btn secondary" style="width:auto;margin:0;padding:12px 16px" id="testBtn">Test</button>
+</div>
+
+<div class="selectRow" style="margin-top:10px">
+<label for="accessCode">🔑 Access code (only if the app owner gave you one)</label>
+<input id="accessCode" type="password" autocomplete="off" placeholder="Leave empty if not required" maxlength="60">
+</div>
+
+<div class="alert" id="alert"></div>
+
+<p class="note"><b>🔒 Security:</b> Gemini API key must stay on the FastAPI server. Never put <code>GEMINI_API_KEY</code> in HTML/JS.</p>
+<p class="note"><b>⚕️ Disclaimer:</b> AI output is decision-support only. Always confirm with a licensed veterinarian before treatment.</p>
+
+<div class="mt-14">
+<h3 style="font-size:15px;margin-bottom:8px">📥 Pending (offline) <span class="queueBadge" id="queueCount" style="display:none">0</span></h3>
+<p class="sub" style="margin-bottom:10px">Cases saved without internet — sent automatically when you're back online.</p>
+<div class="queuePanel" id="queueList"><p class="history-empty">Nothing pending.</p></div>
+
+<h3 style="font-size:15px;margin-bottom:8px;margin-top:18px">📋 Recent History</h3>
+<p class="sub" style="margin-bottom:8px">Last 5 diagnoses (saved in this browser only)</p>
+<div class="btn-row" style="margin-bottom:10px">
+<button type="button" class="smallBtn" id="exportCsvBtn" style="width:100%">📊 Export CSV (research)</button>
+<button type="button" class="smallBtn" id="exportJsonBtn" style="width:100%">🧾 Export JSON</button>
+</div>
+<div class="history-list" id="historyList"><p class="history-empty">No history yet.</p></div>
+</div>
+</div>
+
+</section>
+
+<section class="panel disease-section">
+<h3>🔬 Common Disease Quick-Reference</h3>
+<p class="sub">Tap a disease to focus screening on it. Filter by animal type below.</p>
+
+<div class="filterBar" id="filterBar">
+<button type="button" class="filterChip active" data-filter="all">All</button>
+<button type="button" class="filterChip" data-filter="cattle">Cattle/Buffalo</button>
+<button type="button" class="filterChip" data-filter="goat">Goat/Sheep</button>
+<button type="button" class="filterChip" data-filter="poultry">Poultry</button>
+<button type="button" class="filterChip" data-filter="pets">Pets</button>
+<button type="button" class="filterChip" data-filter="horses">Horses</button>
+<button type="button" class="filterChip" data-filter="camel">🐪 Camel</button>
+</div>
+
+<div class="disease-grid" id="diseaseGrid">
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Foot & Mouth Disease (FMD)" data-species="Cattle/Goat/Sheep"><div class="disease-icon">🐄</div><div class="disease-info"><h4>Foot & Mouth Disease</h4><p>Oral/foot vesicles, drooling, lameness</p><span class="disease-tag">Cattle · Goat</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Mastitis" data-species="Cattle/Buffalo"><div class="disease-icon">🥛</div><div class="disease-info"><h4>Mastitis</h4><p>Udder swelling, abnormal milk, pain</p><span class="disease-tag">Cattle · Buffalo</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Lumpy Skin Disease" data-species="Cattle/Buffalo"><div class="disease-icon">🐮</div><div class="disease-info"><h4>Lumpy Skin Disease</h4><p>Firm skin nodules, fever, swollen nodes</p><span class="disease-tag">Cattle · Buffalo</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Hemorrhagic Septicemia (HS)" data-species="Cattle/Buffalo"><div class="disease-icon">🌡️</div><div class="disease-info"><h4>Hemorrhagic Septicemia</h4><p>Sudden fever, throat swelling, distress</p><span class="disease-tag">Cattle · Buffalo</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Tick Fever (Babesiosis)" data-species="Cattle"><div class="disease-icon">🕷️</div><div class="disease-info"><h4>Tick Fever</h4><p>Pale gums, dark urine, weakness</p><span class="disease-tag">Cattle</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Bloat (Ruminal Tympany)" data-species="Cattle"><div class="disease-icon">🎈</div><div class="disease-info"><h4>Bloat</h4><p>Distended left flank, distress after feed</p><span class="disease-tag">Cattle</span></div></button>
+
+<button type="button" class="disease-card" data-category="goat" data-disease="Peste des Petits Ruminants (PPR)" data-species="Goat/Sheep"><div class="disease-icon">🐐</div><div class="disease-info"><h4>PPR</h4><p>Fever, nasal discharge, mouth erosions</p><span class="disease-tag">Goat · Sheep</span></div></button>
+
+<button type="button" class="disease-card" data-category="goat" data-disease="Enterotoxemia" data-species="Goat/Sheep"><div class="disease-icon">🦠</div><div class="disease-info"><h4>Enterotoxemia</h4><p>Sudden death, convulsions, diarrhea</p><span class="disease-tag">Goat · Sheep</span></div></button>
+
+<button type="button" class="disease-card" data-category="goat" data-disease="Goat Pox" data-species="Goat"><div class="disease-icon">🔴</div><div class="disease-info"><h4>Goat Pox</h4><p>Skin nodules, fever, respiratory signs</p><span class="disease-tag">Goat</span></div></button>
+
+<button type="button" class="disease-card" data-category="goat" data-disease="Foot Rot" data-species="Goat/Sheep"><div class="disease-icon">🦶</div><div class="disease-info"><h4>Foot Rot</h4><p>Lameness, foul smell, hoof separation</p><span class="disease-tag">Goat · Sheep</span></div></button>
+
+<button type="button" class="disease-card" data-category="poultry" data-disease="Newcastle Disease" data-species="Poultry"><div class="disease-icon">🐔</div><div class="disease-info"><h4>Newcastle Disease</h4><p>Respiratory signs, twisted neck, drop in laying</p><span class="disease-tag">Poultry</span></div></button>
+
+<button type="button" class="disease-card" data-category="poultry" data-disease="Coccidiosis" data-species="Poultry"><div class="disease-icon">🐤</div><div class="disease-info"><h4>Coccidiosis</h4><p>Bloody droppings, lethargy, poor growth</p><span class="disease-tag">Poultry</span></div></button>
+
+<button type="button" class="disease-card" data-category="poultry" data-disease="Avian Influenza (Bird Flu — suspected)" data-species="Poultry"><div class="disease-icon">🦅</div><div class="disease-info"><h4>Avian Influenza (suspected)</h4><p>Sudden deaths, swelling, respiratory distress</p><span class="disease-tag">Poultry</span></div></button>
+
+<button type="button" class="disease-card" data-category="poultry" data-disease="Infectious Bronchitis" data-species="Poultry"><div class="disease-icon">💨</div><div class="disease-info"><h4>Infectious Bronchitis</h4><p>Gasping, nasal discharge, egg drop</p><span class="disease-tag">Poultry</span></div></button>
+
+<button type="button" class="disease-card" data-category="pets" data-disease="Rabies (suspected)" data-species="Dog/Cat"><div class="disease-icon">🐕</div><div class="disease-info"><h4>Rabies (suspected)</h4><p>Behavior change, aggression, hypersalivation</p><span class="disease-tag">Dog · Cat</span></div></button>
+
+<button type="button" class="disease-card" data-category="pets" data-disease="Mange / Scabies" data-species="Dog/Goat"><div class="disease-icon">🩹</div><div class="disease-info"><h4>Mange / Scabies</h4><p>Hair loss, crusty skin, intense itching</p><span class="disease-tag">Dog · Goat</span></div></button>
+
+<button type="button" class="disease-card" data-category="pets" data-disease="Parvovirus (suspected)" data-species="Dog"><div class="disease-icon">🐶</div><div class="disease-info"><h4>Parvovirus (suspected)</h4><p>Bloody diarrhea, vomiting, lethargy in pups</p><span class="disease-tag">Dog</span></div></button>
+
+<button type="button" class="disease-card" data-category="pets" data-disease="Feline Panleukopenia (suspected)" data-species="Cat"><div class="disease-icon">🐱</div><div class="disease-info"><h4>Feline Panleukopenia</h4><p>Vomiting, diarrhea, lethargy in kittens</p><span class="disease-tag">Cat</span></div></button>
+
+<button type="button" class="disease-card" data-category="horses" data-disease="Strangles" data-species="Horse"><div class="disease-icon">🐴</div><div class="disease-info"><h4>Strangles</h4><p>Nasal discharge, fever, swollen lymph nodes</p><span class="disease-tag">Horse</span></div></button>
+
+<button type="button" class="disease-card" data-category="horses" data-disease="Colic" data-species="Horse"><div class="disease-icon">😖</div><div class="disease-info"><h4>Colic</h4><p>Rolling, pawing, flank-watching, no manure</p><span class="disease-tag">Horse</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel" data-disease="Camel Mange (Sarcoptic Mange)" data-species="Camel"><div class="disease-icon">🐪</div><div class="disease-info"><h4>Camel Mange</h4><p>Intense itching, hair loss, thick crusty skin</p><span class="disease-tag">Camel</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel" data-disease="Surra (Trypanosomiasis, T. evansi)" data-species="Camel"><div class="disease-icon">🪰</div><div class="disease-info"><h4>Surra (Trypanosomiasis)</h4><p>Fever on/off, weight loss, anaemia, swelling</p><span class="disease-tag">Camel</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel" data-disease="Camel Pox" data-species="Camel"><div class="disease-icon">🔴</div><div class="disease-info"><h4>Camel Pox</h4><p>Pustules and scabs on lips, head, neck, limbs</p><span class="disease-tag">Camel</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel goat" data-disease="Contagious Ecthyma (Orf)" data-species="Camel/Goat/Sheep"><div class="disease-icon">👄</div><div class="disease-info"><h4>Contagious Ecthyma</h4><p>Scabby, warty sores around mouth and lips</p><span class="disease-tag">Camel · Goat</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel" data-disease="Camel Papillomatosis (Warts)" data-species="Camel"><div class="disease-icon">🟤</div><div class="disease-info"><h4>Camel Warts</h4><p>Warty growths on head, lips and neck</p><span class="disease-tag">Camel</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel" data-disease="Camel Calf Diarrhoea" data-species="Camel"><div class="disease-icon">💧</div><div class="disease-info"><h4>Camel Calf Diarrhoea</h4><p>Watery diarrhoea, sunken eyes, weak calf</p><span class="disease-tag">Camel</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel cattle goat" data-disease="Pneumonia (Respiratory Disease)" data-species="Camel/Cattle/Goat"><div class="disease-icon">🫁</div><div class="disease-info"><h4>Pneumonia</h4><p>Fever, cough, nasal discharge, laboured breathing</p><span class="disease-tag">Camel · Cattle</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel goat" data-disease="Caseous Lymphadenitis (Abscess)" data-species="Camel/Goat/Sheep"><div class="disease-icon">🎯</div><div class="disease-info"><h4>Abscess / Caseous Lymphadenitis</h4><p>Firm lymph-node swellings with thick pus</p><span class="disease-tag">Camel · Goat</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel pets" data-disease="Ringworm (Dermatophytosis)" data-species="Camel/Cattle/Dog/Cat"><div class="disease-icon">⭕</div><div class="disease-info"><h4>Ringworm</h4><p>Round hairless scaly patches with crusts</p><span class="disease-tag">Camel · Cattle</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel cattle goat" data-disease="Tick Infestation (Hyalomma)" data-species="Camel/Cattle/Goat"><div class="disease-icon">🕷️</div><div class="disease-info"><h4>Tick Infestation</h4><p>Ticks on skin, anaemia, irritation</p><span class="disease-tag">Camel · Cattle</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel" data-disease="Foot Pad Injury / Lameness" data-species="Camel"><div class="disease-icon">🦶</div><div class="disease-info"><h4>Foot Pad Injury</h4><p>Limping, pad cut, thorn, swollen sole</p><span class="disease-tag">Camel</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel horses pets" data-disease="Ionophore Feed Poisoning (Monensin/Salinomycin)" data-species="Camel/Horse"><div class="disease-icon">☠️</div><div class="disease-info"><h4>Feed Poisoning (Ionophore)</h4><p>Sudden weakness, staggering, dark urine after feed</p><span class="disease-tag">Camel · Horse</span></div></button>
+
+<button type="button" class="disease-card" data-category="camel" data-disease="MERS-CoV in Camels (public-health note)" data-species="Camel"><div class="disease-icon">🦠</div><div class="disease-info"><h4>MERS-CoV (Camel)</h4><p>Mild cough/nasal discharge; can infect humans</p><span class="disease-tag">Camel</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle goat camel" data-disease="Brucellosis" data-species="Cattle/Goat/Camel"><div class="disease-icon">🧬</div><div class="disease-info"><h4>Brucellosis</h4><p>Late abortion, retained placenta, swollen joints</p><span class="disease-tag">Cattle · Goat · Camel</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle goat camel" data-disease="Anthrax" data-species="Cattle/Goat/Camel"><div class="disease-icon">⚠️</div><div class="disease-info"><h4>Anthrax</h4><p>Sudden death, dark blood from body openings</p><span class="disease-tag">All livestock</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Theileriosis" data-species="Cattle/Buffalo"><div class="disease-icon">🩸</div><div class="disease-info"><h4>Theileriosis</h4><p>High fever, swollen lymph nodes, pale/yellow gums</p><span class="disease-tag">Cattle · Buffalo</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Black Quarter (Blackleg)" data-species="Cattle/Buffalo"><div class="disease-icon">💥</div><div class="disease-info"><h4>Black Quarter</h4><p>Hot painful muscle swelling, lameness, sudden death</p><span class="disease-tag">Cattle</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle" data-disease="Milk Fever (Hypocalcaemia)" data-species="Cattle/Buffalo"><div class="disease-icon">🍼</div><div class="disease-info"><h4>Milk Fever</h4><p>Weakness or downer cow around calving</p><span class="disease-tag">Cattle · Buffalo</span></div></button>
+
+<button type="button" class="disease-card" data-category="cattle goat camel" data-disease="Calf Diarrhoea (Scours)" data-species="Cattle/Buffalo/Goat"><div class="disease-icon">🚰</div><div class="disease-info"><h4>Calf / Kid Diarrhoea</h4><p>Watery diarrhoea and dehydration in young animals</p><span class="disease-tag">Young stock</span></div></button>
+
+<button type="button" class="disease-card" data-category="goat" data-disease="Contagious Caprine Pleuropneumonia (CCPP)" data-species="Goat"><div class="disease-icon">🫁</div><div class="disease-info"><h4>CCPP</h4><p>Severe cough, laboured breathing, fever in goats</p><span class="disease-tag">Goat</span></div></button>
+
+<button type="button" class="disease-card" data-category="poultry" data-disease="Gumboro (Infectious Bursal Disease)" data-species="Poultry"><div class="disease-icon">🐣</div><div class="disease-info"><h4>Gumboro (IBD)</h4><p>Whitish diarrhoea, ruffled chicks, 3-6 weeks old</p><span class="disease-tag">Poultry</span></div></button>
+
+<button type="button" class="disease-card" data-category="poultry" data-disease="Chronic Respiratory Disease / Coryza" data-species="Poultry"><div class="disease-icon">😮‍💨</div><div class="disease-info"><h4>CRD / Coryza</h4><p>Sneezing, swollen face, nasal discharge</p><span class="disease-tag">Poultry</span></div></button>
+
+<button type="button" class="disease-card" data-category="pets" data-disease="Canine Distemper" data-species="Dog"><div class="disease-icon">🐕‍🦺</div><div class="disease-info"><h4>Canine Distemper</h4><p>Fever, discharge, cough, twitching, hard footpads</p><span class="disease-tag">Dog</span></div></button>
+
+<button type="button" class="disease-card" data-category="horses" data-disease="Tetanus" data-species="Horse/Donkey"><div class="disease-icon">🐎</div><div class="disease-info"><h4>Tetanus</h4><p>Stiff sawhorse stance, third eyelid showing</p><span class="disease-tag">Horse · Goat</span></div></button>
+
+</div>
+
+</section>
+
+<section class="panel result" id="resultPanel">
+
+<div class="reportHeader">
+<div>
+<h3>3. DoctorVet AI Report</h3>
+<p class="sub">The AI response will appear here.</p>
+</div>
+<div class="reportActions">
+<button type="button" class="smallBtn" id="copyBtn" style="display:none">📋 Copy</button>
+<button type="button" class="smallBtn" id="downloadBtn" style="display:none">⬇ Download</button>
+<span class="badge">AI ASSISTED</span>
+</div>
+</div>
+
+<div class="shareBar" id="shareBar">
+<input id="waNumber" type="tel" inputmode="tel" placeholder="WhatsApp number (optional) e.g. 0300 1234567" maxlength="20">
+<button type="button" class="smallBtn waBtn" id="waBtn">💬 WhatsApp</button>
+<button type="button" class="smallBtn" id="shareFileBtn">📎 Share full report</button>
+<button type="button" class="smallBtn" id="printTopBtn">🖨️ Print</button>
+</div>
+
+<div class="loading" id="loading">
+<div class="spinner"></div>
+<b>DoctorVet AI is analyzing...</b>
+<div class="note" id="loadingNote">For best results, use a well-lit image showing the animal and affected area clearly.</div>
+</div>
+
+<div class="confidenceWrap" id="confidenceWrap">
+<div class="confidenceLabel"><span>AI Confidence</span><span id="confidenceValue">0%</span></div>
+<div class="confidenceTrack"><div class="confidenceFill" id="confidenceFill"></div></div>
+</div>
+
+<div class="severityBadge" id="severityBadge"></div>
+
+<div class="rx" id="rxCard">
+<div class="rx-head">
+<div class="rx-brand">🐾 DoctorVet AI — Examination Report</div>
+<div class="rx-meta" id="rxMeta"></div>
+</div>
+<div class="rx-body">
+
+<div id="rxAlerts"></div>
+
+<div class="rx-section">
+<div class="rx-label">Patient Overview <span style="font-weight:600;color:var(--muted)">(AI-assessed from photo)</span></div>
+<div class="rx-diagnosis" id="rxOverview"></div>
+</div>
+
+<div class="rx-section" id="rxOwnerInputWrap">
+<div class="rx-label">Details You Entered</div>
+<div class="rx-diagnosis" id="rxOwnerInput" style="font-size:13px;font-weight:600"></div>
+</div>
+
+<div class="rx-section" id="rxFindingsWrap">
+<div class="rx-label">Visible Clinical Findings</div>
+<ul class="rx-list" id="rxFindings"></ul>
+</div>
+
+<div class="rx-section" id="rxNotAssessableWrap">
+<div class="rx-label">Cannot Be Assessed From a Photo</div>
+<ul class="rx-list" id="rxNotAssessable"></ul>
+</div>
+
+<div class="rx-section">
+<div class="rx-label">Primary Diagnosis</div>
+<div class="rx-diagnosis" id="rxDiagnosis"></div>
+</div>
+
+<div class="rx-section" id="rxEvidenceWrap">
+<div class="rx-label">Evidence For</div>
+<ul class="rx-list" id="rxEvidence"></ul>
+</div>
+
+<div class="rx-section" id="rxEvidenceAgainstWrap">
+<div class="rx-label">Evidence Against</div>
+<ul class="rx-list" id="rxEvidenceAgainst"></ul>
+</div>
+
+<div class="rx-section" id="rxDifferentialsWrap">
+<div class="rx-label">Differential Diagnoses</div>
+<ul class="rx-list" id="rxDifferentials"></ul>
+</div>
+
+<div class="rx-section" id="rxImmediateWrap">
+<div class="rx-label">Immediate Actions</div>
+<ul class="rx-list" id="rxImmediate"></ul>
+</div>
+
+<div class="rx-section" id="rxMedsWrap">
+<div class="rx-label">Prescription — Medicines (confirm doses with a vet)</div>
+<div class="rx-tablewrap">
+<table class="rx-table" id="rxMedsTable">
+<thead><tr><th>Medicine</th><th>Dose</th><th>Route</th><th>Frequency</th><th>Duration</th><th>Withdrawal</th><th>Notes</th></tr></thead>
+<tbody id="rxMedsBody"></tbody>
+</table>
+</div>
+</div>
+
+<div class="rx-section" id="rxStepsWrap">
+<div class="rx-label">Treatment Steps</div>
+<ul class="rx-list" id="rxSteps"></ul>
+</div>
+
+<div class="rx-section" id="rxSupportiveWrap">
+<div class="rx-label">Supportive Care</div>
+<ul class="rx-list" id="rxSupportive"></ul>
+</div>
+
+<div class="rx-section" id="rxTestsWrap">
+<div class="rx-label">Confirmatory Tests</div>
+<ul class="rx-list" id="rxTests"></ul>
+</div>
+
+<div class="rx-section" id="rxPreventionWrap">
+<div class="rx-label">Prevention Guidelines</div>
+<ul class="rx-list" id="rxPrevention"></ul>
+</div>
+
+<div class="rx-section" id="rxRedFlagsWrap">
+<div class="rx-label">🚨 See a Vet Urgently If</div>
+<div class="rx-redflags"><ul id="rxRedFlags"></ul></div>
+</div>
+
+<div class="rx-section" id="rxFollowUpWrap">
+<div class="rx-label">Follow-up</div>
+<div class="rx-diagnosis" id="rxFollowUp" style="font-size:13px;font-weight:600"></div>
+</div>
+
+<div class="rx-section" id="rxInfoNeededWrap">
+<div class="rx-label">Would Improve Accuracy (send / tell us)</div>
+<ul class="rx-list" id="rxInfoNeeded"></ul>
+</div>
+
+<div class="rx-section" id="rxUrduScriptWrap">
+<div class="rx-label">کسان بھائیوں کے لیے خلاصہ (اردو)</div>
+<div class="rx-urdu-script" id="rxUrduScript" dir="rtl" lang="ur"></div>
+</div>
+
+<div class="rx-section" id="rxUrduWrap">
+<div class="rx-label">Khulasa (Roman Urdu)</div>
+<div class="rx-urdu" id="rxUrdu"></div>
+</div>
+
+<div class="rx-section" id="rxRefsWrap">
+<div class="rx-label">Built-in Reference Protocols (general guidance — vet to confirm)</div>
+<ul class="rx-list" id="rxRefs"></ul>
+</div>
+
+<div class="rx-disclaimer" id="rxVerify" style="border-top:0;padding-top:0;margin-bottom:8px"></div>
+<div class="rx-disclaimer" id="rxDisclaimer"></div>
+
+</div>
+<div class="rx-footer">
+<span class="rx-sign">DoctorVet AI — decision-support only, not a lab-confirmed diagnosis</span>
+<button type="button" class="smallBtn" id="printBtn">🖨️ Print / Save PDF</button>
+</div>
+</div>
+
+<div class="resultBox" id="result">No analysis yet.</div>
+
+</section>
+
+</main>
+
+<div class="footer">
+DoctorVet AI • Veterinary AI Assistant<br>
+Use clinical judgment and professional veterinary confirmation for diagnosis and treatment.<br>
+Shortcuts: Ctrl+U to upload, Ctrl+Enter to analyze.
+</div>
+
+<div id="printText"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+try {
+
+const $ = id => document.getElementById(id);
+
+let selectedFiles = [];
+let lastStructured = null;
+let lastReportId = "";
+let diseaseFocus = null;
+let recognizing = false;
+
+/* ---------- THEME ---------- */
+
+function applyTheme(theme){
+    document.documentElement.setAttribute("data-theme", theme);
+    $("themeToggle").textContent = theme === "dark" ? "☀️" : "🌙";
+}
+
+try {
+    const savedTheme = localStorage.getItem("dv_theme") || "light";
+    applyTheme(savedTheme);
+} catch (e) { /* localStorage unavailable — default light theme stays */ }
+
+$("themeToggle").addEventListener("click", () => {
+    const current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    const next = current === "dark" ? "light" : "dark";
+    applyTheme(next);
+    try { localStorage.setItem("dv_theme", next); } catch (e) {}
+});
+
+/* ---------- BACKEND URL (auto when app is served by the backend) ---------- */
+
+(function initBackendUrl() {
+    let saved = "";
+    let savedCode = "";
+    try {
+        saved = localStorage.getItem("dv_api_url") || "";
+        savedCode = localStorage.getItem("dv_access_code") || "";
+    } catch (e) {}
+
+    if (saved) {
+        $("apiUrl").value = saved;
+    } else if (location.protocol === "http:" || location.protocol === "https:") {
+        $("apiUrl").value = location.origin;      // app opened from the backend's own link
+    }
+    if (savedCode) $("accessCode").value = savedCode;
+
+    $("apiUrl").addEventListener("change", () => {
+        try { localStorage.setItem("dv_api_url", $("apiUrl").value.trim()); } catch (e) {}
+    });
+    $("accessCode").addEventListener("change", () => {
+        try { localStorage.setItem("dv_access_code", $("accessCode").value.trim()); } catch (e) {}
+    });
+})();
+
+/* ---------- INSTALL AS ANDROID APP (PWA) ---------- */
+
+let deferredInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    $("installBtn").style.display = "grid";
+});
+
+$("installBtn").addEventListener("click", async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    try { await deferredInstallPrompt.userChoice; } catch (e) {}
+    deferredInstallPrompt = null;
+    $("installBtn").style.display = "none";
+});
+
+window.addEventListener("appinstalled", () => { $("installBtn").style.display = "none"; });
+
+if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+    navigator.serviceWorker.register("sw.js").catch(() => { /* app works fine without it */ });
+}
+
+/* ---------- ALERT / HELPERS ---------- */
+
+function showAlert(message, type) {
+    const alertEl = $("alert");
+    alertEl.textContent = message;
+    alertEl.className = "alert " + (type || "error");
+    alertEl.style.display = "block";
+}
+
+function hideAlert() { $("alert").style.display = "none"; }
+
+function formatBytes(bytes) {
+    if (!bytes) return "";
+    const units = ["B","KB","MB","GB"];
+    const index = Math.floor(Math.log(bytes) / Math.log(1024));
+    return (bytes / Math.pow(1024, index)).toFixed(index ? 1 : 0) + " " + units[index];
+}
+
+function apiBase() { return $("apiUrl").value.trim().replace(/\/+$/, ""); }
+
+/* ---------- OFFLINE DETECTION ---------- */
+
+function updateOnlineStatus() {
+    $("offlineBanner").style.display = navigator.onLine ? "none" : "block";
+}
+window.addEventListener("online", () => { updateOnlineStatus(); flushQueue(); });
+window.addEventListener("offline", updateOnlineStatus);
+updateOnlineStatus();
+
+/* ---------- OFFLINE QUEUE (IndexedDB: photo + form data saved on-device, sent when online) ---------- */
+
+const QUEUE_DB_NAME = "doctorvet_queue";
+const QUEUE_STORE = "cases";
+const QUEUE_MAX_AUTO_RETRIES = 3;   // after this many failures, stop auto-sending — wait for a manual "Send now"
+
+function openQueueDB() {
+    return new Promise((resolve, reject) => {
+        if (!("indexedDB" in window)) { reject(new Error("This browser can't store data for offline use (IndexedDB unavailable).")); return; }
+        const req = indexedDB.open(QUEUE_DB_NAME, 1);
+        req.onupgradeneeded = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains(QUEUE_STORE)) {
+                db.createObjectStore(QUEUE_STORE, { keyPath: "id", autoIncrement: true });
+            }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function queueAdd(record) {
+    const db = await openQueueDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(QUEUE_STORE, "readwrite");
+        const req = tx.objectStore(QUEUE_STORE).add(record);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function queueGetAll() {
+    const db = await openQueueDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(QUEUE_STORE, "readonly");
+        const req = tx.objectStore(QUEUE_STORE).getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function queuePut(record) {
+    const db = await openQueueDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(QUEUE_STORE, "readwrite");
+        const req = tx.objectStore(QUEUE_STORE).put(record);
+        req.onsuccess = () => resolve();
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function queueDelete(id) {
+    const db = await openQueueDB();
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction(QUEUE_STORE, "readwrite");
+        const req = tx.objectStore(QUEUE_STORE).delete(id);
+        req.onsuccess = () => resolve();
+        req.onerror = () => reject(req.error);
+    });
+}
+
+async function renderQueue() {
+    let items = [];
+    try { items = await queueGetAll(); } catch (e) { return; }
+
+    const countEl = $("queueCount");
+    if (items.length) { countEl.textContent = items.length; countEl.style.display = "inline-block"; }
+    else countEl.style.display = "none";
+
+    const list = $("queueList");
+    if (!items.length) { list.innerHTML = '<p class="history-empty">Nothing pending.</p>'; return; }
+
+    list.innerHTML = "";
+    items.slice().reverse().forEach(item => {
+        const stuck = (item.failCount || 0) >= QUEUE_MAX_AUTO_RETRIES;
+
+        const div = document.createElement("div");
+        div.className = "queueItem" + (stuck ? " stuck" : "");
+
+        const top = document.createElement("div");
+        top.className = "q-top";
+        const title = document.createElement("span");
+        title.className = "q-title";
+        title.textContent = (stuck ? "⚠️ " : "⏳ ") + (item.species || "Species not set") + " — " + item.files.length + " file(s)";
+        top.appendChild(title);
+        div.appendChild(top);
+
+        const meta = document.createElement("div");
+        meta.className = "q-meta";
+        meta.textContent = "Saved: " + new Date(item.savedAt).toLocaleString() +
+            (item.symptoms ? " · " + item.symptoms.slice(0, 60) : "") +
+            (item.lastError ? " · Last try failed: " + item.lastError : "") +
+            (stuck ? " · Not retrying automatically — fix the problem, then tap \"Send now\"." : "");
+        div.appendChild(meta);
+
+        const actions = document.createElement("div");
+        actions.className = "q-actions";
+
+        const sendBtn = document.createElement("button");
+        sendBtn.type = "button";
+        sendBtn.textContent = "📤 Send now";
+        sendBtn.addEventListener("click", () => sendQueuedCase(item, true));
+        actions.appendChild(sendBtn);
+
+        const delBtn = document.createElement("button");
+        delBtn.type = "button";
+        delBtn.textContent = "🗑 Delete";
+        delBtn.addEventListener("click", async () => { await queueDelete(item.id); renderQueue(); });
+        actions.appendChild(delBtn);
+
+        div.appendChild(actions);
+        list.appendChild(div);
+    });
+}
+
+async function sendQueuedCase(item, isManual) {
+    if (!isManual && (item.failCount || 0) >= QUEUE_MAX_AUTO_RETRIES) return;   // give up auto-retrying this one
+    try {
+        const data = await uploadWithRetry(
+            apiBase() + "/api/v1/diagnose",
+            () => {
+                const formData = new FormData();
+                item.files.forEach(f => formData.append("files", f.blob, f.name));
+                Object.entries(item.fields).forEach(([k, v]) => { if (v) formData.append(k, v); });
+                return formData;
+            },
+            () => {},
+            1
+        );
+
+        const queuedReportId = makeReportId();
+        const reportText = "Report ID: " + queuedReportId + "\n" +
+            (data.diagnosis_report || "The server returned no diagnosis report.");
+        saveToHistory(reportText, item.fields.species || "", data.structured || null,
+            item.fields.focus_disease || "", item.fields.bcs || "");
+        await queueDelete(item.id);
+        await renderQueue();
+        showAlert("A saved case was sent successfully — check Recent History for the result.", "success");
+    } catch (error) {
+        try {
+            item.lastError = error.message;
+            item.failCount = (item.failCount || 0) + 1;
+            await queuePut(item);
+        } catch (e2) {}
+        renderQueue();
+        const stillAuto = (item.failCount || 0) < QUEUE_MAX_AUTO_RETRIES;
+        showAlert(
+            "Could not send a saved case: " + error.message +
+            (stillAuto ? "" : " — it won't retry automatically anymore. Fix the problem, then tap \"Send now\"."),
+            "warning"
+        );
+    }
+}
+
+let flushing = false;
+async function flushQueue() {
+    if (flushing || !navigator.onLine) return;
+    flushing = true;
+    try {
+        const items = await queueGetAll();
+        for (const item of items) {
+            if ((item.failCount || 0) >= QUEUE_MAX_AUTO_RETRIES) continue;
+            await sendQueuedCase(item, false);
+            await new Promise(r => setTimeout(r, 800));   // be gentle with the rate limit
+        }
+    } catch (e) {
+    } finally {
+        flushing = false;
+    }
+}
+
+renderQueue();
+if (navigator.onLine) setTimeout(flushQueue, 1500);
+
+/* ---------- DISEASE FOCUS + FILTER CHIPS ---------- */
+
+document.querySelectorAll(".disease-card").forEach(card => {
+    card.addEventListener("click", () => {
+        const name = card.dataset.disease;
+        const species = card.dataset.species;
+        const alreadyActive = card.classList.contains("active");
+
+        document.querySelectorAll(".disease-card").forEach(c => c.classList.remove("active"));
+
+        if (alreadyActive) {
+            diseaseFocus = null;
+            $("focusBanner").style.display = "none";
+            return;
+        }
+
+        card.classList.add("active");
+        diseaseFocus = name;
+        $("focusBannerText").textContent = "🎯 Focused: " + name + " (" + species + ")";
+        $("focusBanner").style.display = "flex";
+    });
+});
+
+$("focusClearBtn").addEventListener("click", () => {
+    diseaseFocus = null;
+    document.querySelectorAll(".disease-card").forEach(c => c.classList.remove("active"));
+    $("focusBanner").style.display = "none";
+});
+
+document.querySelectorAll(".filterChip").forEach(chip => {
+    chip.addEventListener("click", () => {
+        document.querySelectorAll(".filterChip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        const filter = chip.dataset.filter;
+
+        document.querySelectorAll(".disease-card").forEach(card => {
+            const show = (filter === "all") || (card.dataset.category || "").split(" ").includes(filter);
+            card.classList.toggle("filtered-out", !show);
+        });
+    });
+});
+
+/* ---------- VOICE INPUT ---------- */
+
+const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+let recognizer = null;
+
+try {
+    const savedLang = localStorage.getItem("dv_voice_lang");
+    if (savedLang) $("voiceLang").value = savedLang;
+} catch (e) {}
+
+$("voiceLang").addEventListener("change", () => {
+    try { localStorage.setItem("dv_voice_lang", $("voiceLang").value); } catch (e) {}
+    if (recognizing && recognizer) recognizer.stop();
+});
+
+function setVoiceUI(listening) {
+    recognizing = listening;
+    $("voiceBtn").textContent = listening ? "🔴 Listening… tap to stop" : "🎤 Voice Input";
+    $("voiceBtn").classList.toggle("listening", listening);
+}
+
+function voiceDiag() {
+    const ua = navigator.userAgent || "";
+    let browser = "other browser";
+    if (/FBAN|FBAV|Instagram|WhatsApp|Line\//i.test(ua)) browser = "in-app browser";
+    else if (/SamsungBrowser/i.test(ua)) browser = "Samsung Internet";
+    else if (/Firefox/i.test(ua)) browser = "Firefox";
+    else if (/EdgA|Edg\//i.test(ua)) browser = "Edge";
+    else if (/Chrome/i.test(ua)) browser = "Chrome";
+    return "[" + browser + " · " + location.protocol.replace(":", "") + " · secure=" + (window.isSecureContext ? "yes" : "no") +
+        " · browser-voice=" + (SpeechRecognitionAPI ? "yes" : "no") + "]";
+}
+
+const AI_HINT = " Tip: try the 🎙️ AI Voice button — it works even when browser voice typing doesn't.";
+
+function voiceErrorMessage(code) {
+    switch (code) {
+        case "not-allowed":
+            return "Microphone permission is blocked. Tap the 🔒 / ⓘ icon next to the address bar → Site settings → Microphone → Allow, then try again.";
+        case "service-not-allowed":
+            return "The browser's voice service is not allowed here (this happens when the page is opened as a local file or an http link, or inside another app)." + AI_HINT;
+        case "no-speech":
+            return "No voice heard. Hold the phone closer, speak clearly and tap 🎤 again.";
+        case "audio-capture":
+            return "No microphone was found. Check that a microphone is connected and not used by another app.";
+        case "network":
+            return "Browser voice typing needs internet (Chrome sends the audio to Google)." + AI_HINT;
+        case "language-not-supported":
+            return "This voice language isn't supported by browser voice typing (Pashto isn't). Use 🎙️ AI Voice, or choose Urdu/English.";
+        default:
+            return "Voice input problem (" + (code || "unknown") + ")." + AI_HINT;
+    }
+}
+
+$("voiceBtn").addEventListener("click", () => {
+    if (!SpeechRecognitionAPI) {
+        showAlert("This browser has no built-in voice typing (Firefox and in-app browsers such as the WhatsApp/Facebook browser don't)." + AI_HINT + " " + voiceDiag(), "warning");
+        return;
+    }
+
+    if ($("voiceLang").value === "ps") {
+        showAlert("Browser voice typing doesn't support Pashto. Please use the 🎙️ AI Voice button instead.", "warning");
+        return;
+    }
+
+    if (recognizing && recognizer) {
+        recognizer.stop();
+        return;
+    }
+
+    hideAlert();
+
+    const baseText = $("symptomInput").value.trim();
+    let finalText = "";
+
+    try {
+        recognizer = new SpeechRecognitionAPI();
+        recognizer.lang = $("voiceLang").value || "ur-PK";
+        recognizer.continuous = false;
+        recognizer.interimResults = true;
+        recognizer.maxAlternatives = 1;
+
+        recognizer.onstart = () => setVoiceUI(true);
+
+        recognizer.onresult = (event) => {
+            let interim = "";
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+                const piece = event.results[i][0].transcript;
+                if (event.results[i].isFinal) finalText += piece + " ";
+                else interim += piece;
+            }
+            const spoken = (finalText + interim).trim();
+            $("symptomInput").value = (baseText ? baseText + " " : "") + spoken;
+        };
+
+        recognizer.onerror = (event) => {
+            if (event.error === "aborted") return;
+            showAlert(voiceErrorMessage(event.error) + " " + voiceDiag(), "warning");
+            setVoiceUI(false);
+        };
+
+        recognizer.onend = () => setVoiceUI(false);
+
+        recognizer.start();
+    } catch (e) {
+        setVoiceUI(false);
+        showAlert("Could not start voice input: " + e.message + ". You can type your symptoms instead.");
+    }
+});
+
+
+/* ---------- AI VOICE (record -> server converts speech to text) ---------- */
+
+let aiRecorder = null;
+let aiStream = null;
+let aiState = "idle";          // idle | recording | processing
+let aiStopTimer = null;
+
+function setAiVoiceUI(state) {
+    aiState = state;
+    const btn = $("aiVoiceBtn");
+    btn.classList.toggle("listening", state === "recording");
+    btn.disabled = state === "processing";
+    btn.textContent = state === "recording" ? "⏺ Recording… tap to stop"
+        : state === "processing" ? "⏳ Converting to text…"
+        : "🎙️ AI Voice";
+}
+
+function encodeWav(samples, sampleRate) {
+    const buffer = new ArrayBuffer(44 + samples.length * 2);
+    const view = new DataView(buffer);
+    const writeStr = (offset, str) => { for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i)); };
+
+    writeStr(0, "RIFF");
+    view.setUint32(4, 36 + samples.length * 2, true);
+    writeStr(8, "WAVE");
+    writeStr(12, "fmt ");
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 1, true);              // PCM
+    view.setUint16(22, 1, true);              // mono
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true);
+    view.setUint16(32, 2, true);
+    view.setUint16(34, 16, true);
+    writeStr(36, "data");
+    view.setUint32(40, samples.length * 2, true);
+
+    for (let i = 0; i < samples.length; i++) {
+        const v = Math.max(-1, Math.min(1, samples[i]));
+        view.setInt16(44 + i * 2, v < 0 ? v * 0x8000 : v * 0x7FFF, true);
+    }
+    return new Blob([buffer], { type: "audio/wav" });
+}
+
+async function blobToWav16k(blob) {
+    const arrayBuf = await blob.arrayBuffer();
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AC();
+    let decoded;
+    try {
+        decoded = await ctx.decodeAudioData(arrayBuf.slice(0));
+    } finally {
+        if (ctx.close) ctx.close();
+    }
+    const targetRate = 16000;
+    const OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    const offline = new OAC(1, Math.max(1, Math.ceil(decoded.duration * targetRate)), targetRate);
+    const source = offline.createBufferSource();
+    source.buffer = decoded;
+    source.connect(offline.destination);
+    source.start(0);
+    const rendered = await offline.startRendering();
+    return { wav: encodeWav(rendered.getChannelData(0), targetRate), seconds: decoded.duration };
+}
+
+function stopAiStream() {
+    if (aiStopTimer) { clearTimeout(aiStopTimer); aiStopTimer = null; }
+    if (aiStream) { aiStream.getTracks().forEach(t => t.stop()); aiStream = null; }
+}
+
+async function transcribeOnServer(wavBlob) {
+    const formData = new FormData();
+    formData.append("audio", wavBlob, "speech.wav");
+    formData.append("language", $("voiceLang").value || "ur-PK");
+
+    const headers = {};
+    const code = $("accessCode") ? $("accessCode").value.trim() : "";
+    if (code) headers["X-Access-Code"] = code;
+
+    const response = await fetch(apiBase() + "/api/v1/transcribe", { method: "POST", body: formData, headers });
+    const raw = await response.text();
+    let data;
+    try { data = JSON.parse(raw); } catch (e) { data = { detail: raw }; }
+    if (!response.ok) throw new Error(data.detail || ("Server error HTTP " + response.status));
+    return (data.text || "").trim();
+}
+
+$("aiVoiceBtn").addEventListener("click", async () => {
+    if (aiState === "processing") return;
+
+    if (aiState === "recording") {
+        if (aiRecorder && aiRecorder.state !== "inactive") aiRecorder.stop();
+        return;
+    }
+
+    hideAlert();
+
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder === "undefined") {
+        showAlert("This page can't use the microphone here. Voice recording needs an https link (or localhost) opened in Chrome. " + voiceDiag(), "warning");
+        return;
+    }
+
+    try {
+        aiStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (e) {
+        const denied = e && (e.name === "NotAllowedError" || e.name === "SecurityError");
+        showAlert(denied
+            ? "Microphone permission is blocked. Tap the 🔒 / ⓘ icon next to the address bar → Site settings → Microphone → Allow, then try again."
+            : "Could not open the microphone (" + (e && e.name ? e.name : "error") + "). Check that no other app is using it.", "warning");
+        return;
+    }
+
+    const chunks = [];
+    try {
+        aiRecorder = new MediaRecorder(aiStream);
+    } catch (e) {
+        stopAiStream();
+        showAlert("This browser can't record audio (" + e.message + ").", "warning");
+        return;
+    }
+
+    aiRecorder.ondataavailable = (ev) => { if (ev.data && ev.data.size) chunks.push(ev.data); };
+
+    aiRecorder.onstop = async () => {
+        stopAiStream();
+        setAiVoiceUI("processing");
+        try {
+            const blob = new Blob(chunks, { type: aiRecorder.mimeType || "audio/webm" });
+            if (blob.size < 1500) throw new Error("Nothing was recorded. Speak after the button turns red.");
+            const { wav, seconds } = await blobToWav16k(blob);
+            if (seconds < 0.6) throw new Error("Recording was too short. Tap 🎙️, speak for a few seconds, then tap again.");
+            const text = await transcribeOnServer(wav);
+            if (!text) throw new Error("No clear speech was heard. Please try again in a quieter place.");
+            const existing = $("symptomInput").value.trim();
+            $("symptomInput").value = existing ? existing + " " + text : text;
+            showAlert("Voice added to symptoms. You can edit it before analysing.", "success");
+        } catch (e) {
+            showAlert("AI Voice: " + e.message, "warning");
+        } finally {
+            setAiVoiceUI("idle");
+        }
+    };
+
+    aiRecorder.start();
+    setAiVoiceUI("recording");
+    aiStopTimer = setTimeout(() => {          // safety: stop after 30 seconds
+        if (aiRecorder && aiRecorder.state !== "inactive") aiRecorder.stop();
+    }, 30000);
+});
+
+/* ---------- IMAGE COMPRESSION ---------- */
+
+function compressImage(file) {
+    return new Promise((resolve) => {
+        if (!file.type.startsWith("image/") || file.size <= 1.5 * 1024 * 1024) {
+            resolve({ blob: file, compressed: false });
+            return;
+        }
+
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+
+        img.onload = () => {
+            const maxDim = 1600;
+            let { width, height } = img;
+
+            if (width > maxDim || height > maxDim) {
+                const scale = maxDim / Math.max(width, height);
+                width = Math.round(width * scale);
+                height = Math.round(height * scale);
+            }
+
+            const canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, width, height);
+
+            canvas.toBlob((blob) => {
+                URL.revokeObjectURL(url);
+                if (blob && blob.size < file.size) {
+                    resolve({ blob, compressed: true, originalSize: file.size });
+                } else {
+                    resolve({ blob: file, compressed: false });
+                }
+            }, "image/jpeg", 0.82);
+        };
+
+        img.onerror = () => {
+            URL.revokeObjectURL(url);
+            resolve({ blob: file, compressed: false });
+        };
+
+        img.src = url;
+    });
+}
+
+/* ---------- FILE SELECTION ---------- */
+
+const IMAGE_TYPES = ["image/jpeg","image/png","image/webp"];
+const VIDEO_TYPES = ["video/mp4","video/quicktime","video/avi"];
+const MAX_IMAGES = 4;
+
+function resetResultUI() {
+    $("result").textContent = "No analysis yet.";
+    $("severityBadge").style.display = "none";
+    $("confidenceWrap").style.display = "none";
+    $("copyBtn").style.display = "none";
+    $("downloadBtn").style.display = "none";
+    $("shareBar").style.display = "none";
+    $("rxCard").style.display = "none";
+}
+
+function renderPreviews() {
+    const preview = $("preview");
+    preview.innerHTML = "";
+    $("compressInfo").style.display = "none";
+
+    if (!selectedFiles.length) {
+        preview.style.display = "none";
+        preview.classList.remove("multi");
+        $("fileName").textContent = "";
+        $("fileSize").textContent = "";
+        $("analyzeBtn").disabled = true;
+        $("clearBtn").style.display = "none";
+        return;
+    }
+
+    const multi = selectedFiles.length > 1;
+    preview.classList.toggle("multi", multi);
+    preview.style.display = multi ? "grid" : "block";
+
+    selectedFiles.forEach((file, idx) => {
+        const wrap = document.createElement("div");
+        wrap.className = "thumb";
+        const url = URL.createObjectURL(file);
+
+        if (file.type.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.src = url;
+            img.alt = "Animal photo " + (idx + 1);
+            wrap.appendChild(img);
+        } else {
+            const video = document.createElement("video");
+            video.src = url;
+            video.controls = true;
+            video.playsInline = true;
+            wrap.appendChild(video);
+        }
+
+        const x = document.createElement("button");
+        x.type = "button";
+        x.className = "thumbX";
+        x.title = "Remove";
+        x.textContent = "×";
+        x.addEventListener("click", () => {
+            selectedFiles.splice(idx, 1);
+            if (!selectedFiles.length) $("fileInput").value = "";
+            renderPreviews();
+        });
+        wrap.appendChild(x);
+
+        preview.appendChild(wrap);
+    });
+
+    const total = selectedFiles.reduce((sum, f) => sum + f.size, 0);
+    $("fileName").textContent = selectedFiles.length === 1
+        ? selectedFiles[0].name
+        : selectedFiles.length + " photos selected";
+    $("fileSize").textContent = formatBytes(total);
+    $("analyzeBtn").disabled = false;
+    $("clearBtn").style.display = "block";
+}
+
+function selectFiles(fileList) {
+    const incoming = Array.from(fileList || []).filter(Boolean);
+    if (!incoming.length) return;
+
+    for (const f of incoming) {
+        if (!IMAGE_TYPES.includes(f.type) && !VIDEO_TYPES.includes(f.type)) {
+            showAlert("Unsupported file type: " + (f.type || "unknown"));
+            return;
+        }
+        if (f.size > 20 * 1024 * 1024) {
+            showAlert("'" + f.name + "' is larger than 20MB. Please choose a smaller file.");
+            return;
+        }
+    }
+
+    const hasVideoIncoming = incoming.some(f => VIDEO_TYPES.includes(f.type));
+
+    if (hasVideoIncoming) {
+        if (incoming.length > 1) {
+            showAlert("Choose either up to 4 photos OR one video — not both together.");
+            return;
+        }
+        selectedFiles = [incoming[0]];          // a video replaces everything
+    } else {
+        const existingImages = selectedFiles.filter(f => IMAGE_TYPES.includes(f.type));
+        const merged = existingImages.slice();
+        incoming.forEach(f => {
+            const dup = merged.some(m => m.name === f.name && m.size === f.size);
+            if (!dup) merged.push(f);
+        });
+        if (merged.length > MAX_IMAGES) {
+            showAlert("Maximum " + MAX_IMAGES + " photos. Extra photos were ignored.", "warning");
+        } else {
+            hideAlert();
+        }
+        selectedFiles = merged.slice(0, MAX_IMAGES);
+    }
+
+    renderPreviews();
+}
+
+$("fileInput").addEventListener("change", e => { selectFiles(e.target.files); e.target.value = ""; });
+$("heroUploadBtn").addEventListener("click", () => $("fileInput").click());
+
+["dragenter","dragover"].forEach(evt => {
+    $("drop").addEventListener(evt, e => { e.preventDefault(); $("drop").classList.add("drag"); });
+});
+["dragleave","drop"].forEach(evt => {
+    $("drop").addEventListener(evt, e => { e.preventDefault(); $("drop").classList.remove("drag"); });
+});
+$("drop").addEventListener("drop", e => selectFiles(e.dataTransfer.files));
+
+$("clearBtn").addEventListener("click", () => {
+    selectedFiles = [];
+    $("fileInput").value = "";
+    renderPreviews();
+    resetResultUI();
+    hideAlert();
+});
+
+$("saveLaterBtn").addEventListener("click", async () => {
+    if (!selectedFiles.length) {
+        showAlert("Choose at least one photo or a video first.", "warning");
+        return;
+    }
+
+    try {
+        const fields = {
+            species: $("speciesSelect").value,
+            symptoms: $("symptomInput").value.trim(),
+            focus_disease: diseaseFocus || "",
+            age: $("ageInput").value.trim(),
+            weight_kg: $("weightInput").value.trim(),
+            temperature: $("tempInput").value.trim(),
+            duration: $("durationInput").value.trim(),
+            bcs: $("bcsSelect").value,
+            sex: $("sexSelect").value,
+            breed: $("breedInput").value.trim(),
+            region: $("regionInput").value.trim(),
+        };
+
+        // Compress images before storing on-device too, so saved cases don't eat up phone storage.
+        const files = [];
+        for (const f of selectedFiles) {
+            const r = await compressImage(f);
+            files.push({ blob: r.blob, name: f.name });
+        }
+
+        await queueAdd({ savedAt: Date.now(), species: fields.species, symptoms: fields.symptoms, files, fields, lastError: "" });
+        await renderQueue();
+
+        showAlert("Saved. This case will be sent automatically as soon as you\'re back online (or tap \"Send now\" under Pending).", "success");
+
+        selectedFiles = [];
+        $("fileInput").value = "";
+        renderPreviews();
+    } catch (e) {
+        showAlert("Could not save this case on your device: " + e.message, "error");
+    }
+});
+
+/* ---------- TEST API ---------- */
+
+async function testAPI() {
+    hideAlert();
+    $("apiStatus").textContent = "● Checking...";
+    $("apiStatus").className = "status";
+
+    try {
+        const response = await fetch(apiBase() + "/health", { method: "GET" });
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        const data = await response.json();
+        $("apiStatus").textContent = "● API online";
+        $("apiStatus").className = "status online";
+        let msg = "Backend is online" + (data.version ? " (v" + data.version + ")" : "") + ".";
+        if (data.gemini_configured === false) msg += " But the Gemini API key is NOT set on the server.";
+        if (data.access_code_required) msg += " An access code is required — enter it below.";
+        showAlert(msg, data.gemini_configured === false ? "warning" : "success");
+    } catch (error) {
+        $("apiStatus").textContent = "● API offline";
+        $("apiStatus").className = "status offline";
+        showAlert("Backend connection failed. Check the API URL, server, firewall and CORS settings.");
+    }
+}
+
+$("testBtn").addEventListener("click", testAPI);
+$("apiStatus").addEventListener("click", testAPI);
+
+/* ---------- SEVERITY + CONFIDENCE PARSING ---------- */
+
+function showSeverityBadge(reportText) {
+    const badge = $("severityBadge");
+    const match = reportText.match(/severity\s*(?:level)?\s*[:\-]?\s*(critical|high|moderate|low)/i);
+
+    if (!match) { badge.style.display = "none"; return; }
+
+    const level = match[1].toLowerCase();
+    const labels = {
+        critical: "🚨 Severity: Critical — seek veterinary care immediately",
+        high: "⚠️ Severity: High — urgent veterinary attention advised",
+        moderate: "🟡 Severity: Moderate — veterinary check-up recommended",
+        low: "🟢 Severity: Low — monitor and follow prevention guidance"
+    };
+
+    badge.className = "severityBadge sev-" + level;
+    badge.style.display = "flex";
+    badge.textContent = labels[level];
+}
+
+function showConfidenceBar(reportText) {
+    const wrap = $("confidenceWrap");
+    const match = reportText.match(/confidence\s*[:\-]?\s*(\d{1,3})\s*%/i);
+
+    if (!match) { wrap.style.display = "none"; return; }
+
+    let value = parseInt(match[1], 10);
+    if (isNaN(value)) { wrap.style.display = "none"; return; }
+    value = Math.max(0, Math.min(100, value));
+
+    const fill = $("confidenceFill");
+    fill.style.width = value + "%";
+    fill.className = "confidenceFill " + (value >= 70 ? "conf-high" : value >= 40 ? "conf-mid" : "conf-low");
+    $("confidenceValue").textContent = value + "%";
+    wrap.style.display = "block";
+}
+
+/* ---------- PRESCRIPTION CARD (structured JSON render) ---------- */
+
+function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str == null ? "" : String(str);
+    return div.innerHTML;
+}
+
+function fillList(elId, items, emptyText) {
+    const el = $(elId);
+    el.innerHTML = "";
+
+    if (!items || !items.length) {
+        el.parentElement.style.display = emptyText ? "block" : "none";
+        if (emptyText) {
+            const li = document.createElement("li");
+            li.textContent = emptyText;
+            el.appendChild(li);
+        }
+        return;
+    }
+
+    el.parentElement.style.display = "block";
+
+    items.forEach(item => {
+        const li = document.createElement("li");
+        if (typeof item === "object" && item !== null) {
+            li.textContent = (item.name || "") +
+                (item.likelihood ? " (" + item.likelihood + ")" : "") +
+                (item.reasoning ? " — " + item.reasoning : "") +
+                (item.how_to_differentiate ? " [Differentiate: " + item.how_to_differentiate + "]" : "");
+        } else {
+            li.textContent = item;
+        }
+        el.appendChild(li);
+    });
+}
+
+function renderPrescription(structured, species, focus, bcs) {
+    lastStructured = structured || null;
+    const rx = $("rxCard");
+
+    if (!structured) {
+        rx.style.display = "none";
+        return;
+    }
+
+    $("rxMeta").textContent =
+        (lastReportId ? lastReportId + " · " : "") +
+        new Date().toLocaleString() +
+        (species ? " · " + species : "") +
+        (bcs ? " · BCS: " + bcs.split(" - ")[0] : "") +
+        (focus ? " · Focus: " + focus : "");
+
+    const overviewBits = [];
+    if (structured.species_detected) overviewBits.push("Species: " + structured.species_detected);
+    if (structured.age_class) overviewBits.push("Age: " + structured.age_class);
+    if (structured.body_condition) overviewBits.push("Condition: " + structured.body_condition);
+    if (structured.image_quality) overviewBits.push("Image quality: " + structured.image_quality);
+    $("rxOverview").textContent = overviewBits.join(" · ") || "Not specified";
+
+    const diagEl = $("rxDiagnosis");
+    diagEl.textContent = structured.primary_diagnosis || "Indeterminate";
+    diagEl.className = "rx-diagnosis" + (structured.indeterminate ? " rx-indeterminate" : "");
+
+    /* alerts: urgency, notifiable, zoonotic, safety */
+    const alertsEl = $("rxAlerts");
+    alertsEl.innerHTML = "";
+    function addAlert(cls, text) {
+        const d = document.createElement("div");
+        d.className = "rx-alert " + cls;
+        d.textContent = text;
+        alertsEl.appendChild(d);
+    }
+    if (structured.urgency) addAlert("urgency", "⏱️ Urgency: " + structured.urgency +
+        (structured.severity_reasoning ? " — " + structured.severity_reasoning : ""));
+    const notif = structured.notifiable_suspected;
+    if (notif && notif.suspected) addAlert("notifiable",
+        "🚨 Suspected notifiable disease: " + (notif.disease || "") + ". " + (notif.action || "Isolate the animal and contact the animal-health authority."));
+    const zoo = structured.zoonotic_risk;
+    if (zoo && zoo.present) addAlert("zoonotic", "☣️ Can infect humans: " + (zoo.notes || "Wear gloves/mask and wash hands after handling."));
+    if (structured.temperature_assessment) addAlert("urgency", "🌡️ " + structured.temperature_assessment);
+    (structured.safety_notes || []).forEach(n => addAlert("safety", "🛡️ Safety check: " + n));
+
+    fillList("rxFindings", structured.clinical_findings, null);
+    fillList("rxNotAssessable", structured.not_assessable, null);
+    fillList("rxEvidence", structured.key_evidence, null);
+    fillList("rxEvidenceAgainst", structured.evidence_against, null);
+    fillList("rxImmediate", structured.immediate_actions, null);
+    fillList("rxSupportive", structured.supportive_care, null);
+    fillList("rxTests", structured.confirmatory_tests, null);
+    fillList("rxInfoNeeded", structured.info_needed, null);
+
+    $("rxFollowUp").textContent = structured.follow_up || "";
+    $("rxFollowUpWrap").style.display = structured.follow_up ? "block" : "none";
+    $("rxUrduScript").textContent = structured.urdu_script_summary || "";
+    $("rxUrduScriptWrap").style.display = structured.urdu_script_summary ? "block" : "none";
+    $("rxUrdu").textContent = structured.urdu_summary || "";
+    $("rxUrduWrap").style.display = structured.urdu_summary ? "block" : "none";
+
+    const refItems = (structured.reference_protocols || []).map(r =>
+        r.name + (r.notifiable ? " [Reportable]" : "") + (r.zoonotic ? " [Zoonotic]" : "") + ": " + r.protocol);
+    fillList("rxRefs", refItems, null);
+
+    const ver = structured.verification || {};
+    $("rxVerify").textContent = ver.images_analyzed
+        ? "Verification: " + ver.images_analyzed + " image(s)/video analysed · second-pass safety review " +
+          (ver.critic_applied ? "completed" : "not applied") + " · deterministic drug-safety checks applied."
+        : "";
+
+    fillList("rxDifferentials", structured.differentials, null);
+
+    const meds = structured.medicines || [];
+    $("rxMedsWrap").style.display = meds.length ? "block" : "none";
+    const medsBody = $("rxMedsBody");
+    medsBody.innerHTML = "";
+    meds.forEach(m => {
+        const tr = document.createElement("tr");
+        ["name","dose","route","frequency","duration","withdrawal","notes"].forEach(key => {
+            const td = document.createElement("td");
+            let cellText = (m && m[key]) ? m[key] : "—";
+            if (key === "dose" && m && m.total_dose_for_weight) cellText += "\n➜ " + m.total_dose_for_weight;
+            td.textContent = cellText;
+            td.style.whiteSpace = "pre-wrap";
+            tr.appendChild(td);
+        });
+        medsBody.appendChild(tr);
+    });
+
+    fillList("rxSteps", structured.treatment_steps, null);
+    fillList("rxPrevention", structured.prevention, null);
+    fillList("rxRedFlags", structured.red_flags, "No specific red flags listed — use general clinical judgment.");
+
+    $("rxDisclaimer").textContent = "⚠️ " + (structured.disclaimer ||
+        "This is an AI-assisted visual screening, not a laboratory-confirmed diagnosis. Confirm with a licensed veterinarian before treatment.");
+
+    rx.style.display = "block";
+}
+
+/* ---------- HISTORY (localStorage, last 5) ---------- */
+
+function loadHistory() {
+    try {
+        return JSON.parse(localStorage.getItem("dv_history") || "[]");
+    } catch (e) {
+        return [];
+    }
+}
+
+function renderHistory() {
+    const list = $("historyList");
+    const items = loadHistory();
+
+    if (!items.length) {
+        list.innerHTML = '<p class="history-empty">No history yet.</p>';
+        return;
+    }
+
+    list.innerHTML = "";
+
+    items.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+
+        const dateEl = document.createElement("div");
+        dateEl.className = "h-date";
+        dateEl.textContent = item.date;
+
+        const titleEl = document.createElement("div");
+        titleEl.className = "h-title";
+        titleEl.textContent = item.species || "Unknown species";
+
+        const previewEl = document.createElement("div");
+        previewEl.className = "h-preview";
+        previewEl.textContent = item.preview;
+
+        div.appendChild(dateEl);
+        div.appendChild(titleEl);
+        div.appendChild(previewEl);
+
+        div.addEventListener("click", () => {
+            lastReportId = item.reportId || "";
+            $("result").textContent = item.fullReport;
+            $("result").style.display = "block";
+            showSeverityBadge(item.fullReport);
+            showConfidenceBar(item.fullReport);
+            renderPrescription(item.structured || null, item.species, item.focus, item.bcs);
+            $("copyBtn").style.display = "inline-block";
+            $("downloadBtn").style.display = "inline-block";
+            $("shareBar").style.display = "flex";
+            $("resultPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+
+        list.appendChild(div);
+    });
+}
+
+function saveToHistory(reportText, species, structured, focus, bcs) {
+    try {
+        const idMatch = reportText.match(/^Report ID:\s*(\S+)/);
+        const items = loadHistory();
+        items.unshift({
+            date: new Date().toLocaleString(),
+            reportId: idMatch ? idMatch[1] : "",
+            species: species || "Auto-detected",
+            focus: focus || null,
+            bcs: bcs || "",
+            preview: reportText.slice(0, 120).replace(/\s+/g, " ") + "...",
+            fullReport: reportText,
+            structured: structured || null
+        });
+        localStorage.setItem("dv_history", JSON.stringify(items.slice(0, 5)));
+        renderHistory();
+    } catch (e) { /* localStorage unavailable — history simply won't persist */ }
+}
+
+/* ---------- RESEARCH EXPORT (all locally-saved history, for record-keeping / analysis) ---------- */
+
+function csvEscape(value) {
+    const s = (value === null || value === undefined) ? "" : String(value);
+    return '"' + s.replace(/"/g, '""') + '"';
+}
+
+function downloadBlob(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+$("exportCsvBtn").addEventListener("click", () => {
+    const items = loadHistory();
+    if (!items.length) { showAlert("No saved history yet to export.", "warning"); return; }
+
+    const cols = ["report_id", "date", "species", "bcs", "focus_disease", "primary_diagnosis", "confidence_percent",
+        "severity", "urgency", "notifiable_suspected", "zoonotic_risk", "medicine_count", "model", "critic_applied"];
+    const rows = [cols.join(",")];
+
+    items.forEach(item => {
+        const s = item.structured || {};
+        const notif = s.notifiable_suspected || {};
+        const zoo = s.zoonotic_risk || {};
+        const ver = s.verification || {};
+        const row = [
+            item.reportId || "", item.date || "", item.species || "", item.bcs || "", item.focus || "",
+            s.primary_diagnosis || "", s.confidence_percent != null ? s.confidence_percent : "",
+            s.severity || "", s.urgency || "", notif.suspected ? "yes" : "no", zoo.present ? "yes" : "no",
+            (s.medicines || []).length, ver.model || "", ver.critic_applied ? "yes" : "no",
+        ];
+        rows.push(row.map(csvEscape).join(","));
+    });
+
+    downloadBlob(rows.join("\r\n"), "doctorvet-ai-history-" + Date.now() + ".csv", "text/csv");
+});
+
+$("exportJsonBtn").addEventListener("click", () => {
+    const items = loadHistory();
+    if (!items.length) { showAlert("No saved history yet to export.", "warning"); return; }
+    downloadBlob(JSON.stringify(items, null, 2), "doctorvet-ai-history-" + Date.now() + ".json", "application/json");
+});
+
+renderHistory();
+
+/* ---------- COPY / DOWNLOAD REPORT ---------- */
+
+$("copyBtn").addEventListener("click", async () => {
+    const text = $("result").textContent;
+    try {
+        await navigator.clipboard.writeText(text);
+        showAlert("Report copied to clipboard.", "success");
+    } catch (e) {
+        showAlert("Could not copy automatically — please select and copy the text manually.");
+    }
+});
+
+$("downloadBtn").addEventListener("click", () => {
+    const text = $("result").textContent;
+    const blob = new Blob([text], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "doctorvet-ai-report-" + Date.now() + ".txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+});
+
+/* ---------- UPLOAD WITH PROGRESS + RETRY ---------- */
+
+function uploadWithProgress(url, formData, onProgress) {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        const code = $("accessCode") ? $("accessCode").value.trim() : "";
+        if (code) xhr.setRequestHeader("X-Access-Code", code);
+
+        xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable && onProgress) {
+                onProgress(Math.round((e.loaded / e.total) * 100));
+            }
+        };
+
+        xhr.onload = () => {
+            let data;
+            try { data = JSON.parse(xhr.responseText); }
+            catch { data = { detail: xhr.responseText }; }
+
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve(data);
+            } else {
+                reject(new Error(data.detail || ("Server error HTTP " + xhr.status)));
+            }
+        };
+
+        xhr.onerror = () => reject(new Error("Network error — could not reach the backend."));
+        xhr.ontimeout = () => reject(new Error("Request timed out."));
+        xhr.timeout = 90000;
+
+        xhr.send(formData);
+    });
+}
+
+async function uploadWithRetry(url, buildFormData, onProgress, maxRetries) {
+    let lastError;
+
+    for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+            if (attempt > 0) {
+                $("loadingNote").textContent = "Retrying... (attempt " + (attempt + 1) + " of " + (maxRetries + 1) + ")";
+                await new Promise(r => setTimeout(r, attempt * 1500));
+            }
+            return await uploadWithProgress(url, buildFormData(), onProgress);
+        } catch (error) {
+            lastError = error;
+            // Don't retry on a real server response (4xx/5xx) — only on network-level failures
+            if (!/Network error|timed out/i.test(error.message)) throw error;
+        }
+    }
+
+    throw lastError;
+}
+
+/* ---------- ANALYZE ---------- */
+
+$("analyzeBtn").addEventListener("click", async () => {
+    if (!selectedFiles.length) return;
+
+    hideAlert();
+    $("analyzeBtn").disabled = true;
+    $("loading").style.display = "block";
+    $("loadingNote").textContent = "Examining " + selectedFiles.length + (selectedFiles.length > 1 ? " photos" : " file") + " and running the safety review...";
+    $("result").style.display = "none";
+    $("severityBadge").style.display = "none";
+    $("confidenceWrap").style.display = "none";
+    $("copyBtn").style.display = "none";
+    $("downloadBtn").style.display = "none";
+    $("shareBar").style.display = "none";
+    $("rxCard").style.display = "none";
+    $("progressWrap").style.display = "block";
+    $("progressBar").style.width = "0%";
+
+    const species = $("speciesSelect").value;
+    const symptoms = $("symptomInput").value.trim();
+    const age = $("ageInput").value.trim();
+    const weight = $("weightInput").value.trim();
+    const temperature = $("tempInput").value.trim();
+    const duration = $("durationInput").value.trim();
+    const bcs = $("bcsSelect").value;
+    const sex = $("sexSelect").value;
+    const breed = $("breedInput").value.trim();
+    const region = $("regionInput").value.trim();
+
+    try {
+        const prepared = [];
+        let anyCompressed = false, originalTotal = 0, newTotal = 0;
+
+        for (const f of selectedFiles) {
+            const r = await compressImage(f);
+            prepared.push({ blob: r.blob, name: f.name });
+            originalTotal += f.size;
+            newTotal += r.blob.size;
+            if (r.compressed) anyCompressed = true;
+        }
+
+        if (newTotal > 20 * 1024 * 1024) {
+            throw new Error("Files are over 20MB in total even after compression. Please use fewer or smaller files.");
+        }
+
+        if (anyCompressed) {
+            const savedPct = Math.round((1 - newTotal / originalTotal) * 100);
+            $("compressInfo").textContent = "Compressed -" + savedPct + "%";
+            $("compressInfo").style.display = "inline-block";
+        }
+
+        const data = await uploadWithRetry(
+            apiBase() + "/api/v1/diagnose",
+            () => {
+                const formData = new FormData();
+                prepared.forEach(p => formData.append("files", p.blob, p.name));
+                if (species) formData.append("species", species);
+                if (symptoms) formData.append("symptoms", symptoms);
+                if (diseaseFocus) formData.append("focus_disease", diseaseFocus);
+                if (age) formData.append("age", age);
+                if (weight) formData.append("weight_kg", weight);
+                if (temperature) formData.append("temperature", temperature);
+                if (duration) formData.append("duration", duration);
+                if (bcs) formData.append("bcs", bcs);
+                if (sex) formData.append("sex", sex);
+                if (breed) formData.append("breed", breed);
+                if (region) formData.append("region", region);
+                return formData;
+            },
+            (pct) => { $("progressBar").style.width = pct + "%"; },
+            2
+        );
+
+        const reportId = makeReportId();
+        lastReportId = reportId;
+        const reportText = "Report ID: " + reportId + "\n" +
+            (data.diagnosis_report || "The server returned no diagnosis report.");
+        const structured = data.structured || null;
+
+        $("result").textContent = reportText;
+        $("result").style.display = "block";
+        showSeverityBadge(structured && structured.severity ? "Severity: " + structured.severity : reportText);
+        showConfidenceBar(structured && structured.confidence_percent != null ? "Confidence: " + structured.confidence_percent + "%" : reportText);
+        renderPrescription(structured, species, diseaseFocus, bcs);
+        $("copyBtn").style.display = "inline-block";
+        $("downloadBtn").style.display = "inline-block";
+        $("shareBar").style.display = "flex";
+
+        saveToHistory(reportText, species, structured, diseaseFocus, bcs);
+
+        showAlert("Analysis completed successfully.", "success");
+        $("resultPanel").scrollIntoView({ behavior: "smooth", block: "start" });
+
+    } catch (error) {
+        $("result").style.display = "block";
+        $("result").textContent = "";
+        showAlert("Analysis failed: " + error.message);
+    } finally {
+        $("loading").style.display = "none";
+        $("progressWrap").style.display = "none";
+        $("analyzeBtn").disabled = !selectedFiles.length;
+    }
+});
+
+/* ---------- PRINT / SAVE AS PDF ---------- */
+
+function makeReportId() {
+    const d = new Date();
+    const stamp = d.getFullYear().toString() + String(d.getMonth() + 1).padStart(2, "0") + String(d.getDate()).padStart(2, "0");
+    const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
+    return "DV-" + stamp + "-" + rand;
+}
+
+function hasReport() {
+    const t = $("result").textContent.trim();
+    return !!t && t !== "No analysis yet.";
+}
+
+function printReport() {
+    if (!hasReport()) {
+        showAlert("There is no report to print yet. Run an analysis (or open one from Recent History) first.", "warning");
+        return;
+    }
+
+    const cardVisible = $("rxCard").style.display !== "none" && $("rxCard").offsetParent !== null;
+
+    if (cardVisible) {
+        document.body.classList.remove("print-text");
+    } else {
+        $("printText").textContent =
+            "DoctorVet AI — Examination Report\nPrinted: " + new Date().toLocaleString() + "\n\n" +
+            $("result").textContent.trim();
+        document.body.classList.add("print-text");
+    }
+
+    window.print();
+}
+
+window.addEventListener("afterprint", () => document.body.classList.remove("print-text"));
+
+$("printBtn").addEventListener("click", printReport);
+$("printTopBtn").addEventListener("click", printReport);
+
+/* ---------- WHATSAPP + SHARE ---------- */
+
+function normalizePhone(raw) {
+    let digits = String(raw || "").replace(/\D/g, "");
+    if (!digits) return "";
+    if (digits.startsWith("00")) digits = digits.slice(2);
+    if (digits.startsWith("0")) digits = "92" + digits.slice(1);      // 0300... -> 92300...
+    else if (digits.length === 10 && digits.startsWith("3")) digits = "92" + digits; // 300... -> 92300...
+    return digits;
+}
+
+function buildShareText(maxLen) {
+    const s = lastStructured;
+    const lines = [];
+    lines.push("🐾 *DoctorVet AI — Examination Report*");
+    lines.push(new Date().toLocaleDateString());
+
+    function bullets(title, arr, limit) {
+        const items = (arr || []).map(x => typeof x === "string" ? x : "").filter(Boolean).slice(0, limit);
+        if (!items.length) return;
+        lines.push("");
+        lines.push(title);
+        items.forEach(x => lines.push("• " + x));
+    }
+
+    if (s) {
+        lines.push("");
+        if (s.species_detected) lines.push("🐾 Species: " + s.species_detected);
+        lines.push("🩺 Diagnosis: " + (s.primary_diagnosis || "Indeterminate") +
+            (s.confidence_percent != null ? " (" + s.confidence_percent + "% confidence)" : ""));
+        lines.push("⚠️ Severity: " + (s.severity || "-") + (s.urgency ? " | Urgency: " + s.urgency : ""));
+        if (s.notifiable_suspected && s.notifiable_suspected.suspected) {
+            lines.push("🚨 Suspected reportable disease: " + (s.notifiable_suspected.disease || "") + " — isolate the animal and inform the animal-health authority.");
+        }
+        if (s.zoonotic_risk && s.zoonotic_risk.present) {
+            lines.push("☣️ Can infect humans — wear gloves/mask and wash hands.");
+        }
+        bullets("✅ *Immediate actions:*", s.immediate_actions, 4);
+
+        const meds = (s.medicines || []).slice(0, 5).map(m => {
+            const parts = [m.name, m.dose, m.route, m.frequency, m.duration].filter(Boolean).join(", ");
+            const total = m.total_dose_for_weight ? " [" + m.total_dose_for_weight + "]" : "";
+            const wd = m.withdrawal ? " (Withdrawal: " + m.withdrawal + ")" : "";
+            return parts + total + wd;
+        });
+        bullets("💊 *Medicines (confirm dose with a vet):*", meds, 5);
+        bullets("🚩 *See a vet urgently if:*", s.red_flags, 3);
+
+        const summary = s.urdu_script_summary || s.urdu_summary;
+        if (summary) {
+            lines.push("");
+            lines.push("📝 " + summary);
+        }
+    } else {
+        lines.push("");
+        lines.push($("result").textContent.trim());
+    }
+
+    const footer = "\n\n⚕️ AI-assisted screening only — confirm diagnosis and doses with a licensed veterinarian.";
+    let body = lines.join("\n");
+    if (body.length + footer.length > maxLen) {
+        body = body.slice(0, Math.max(0, maxLen - footer.length - 40)).trimEnd() + "…\n(shortened — use “Share full report” for everything)";
+    }
+    return body + footer;
+}
+
+$("waNumber").addEventListener("change", () => {
+    try { localStorage.setItem("dv_wa_number", $("waNumber").value.trim()); } catch (e) {}
+});
+try {
+    const savedNumber = localStorage.getItem("dv_wa_number");
+    if (savedNumber) $("waNumber").value = savedNumber;
+} catch (e) {}
+
+$("waBtn").addEventListener("click", () => {
+    if (!hasReport()) {
+        showAlert("Run an analysis first, then share the result on WhatsApp.", "warning");
+        return;
+    }
+
+    const rawNumber = $("waNumber").value.trim();
+    const phone = normalizePhone(rawNumber);
+
+    if (rawNumber && (phone.length < 11 || phone.length > 15)) {
+        showAlert("That WhatsApp number looks incomplete. Use a format like 0300 1234567 — or leave it empty to pick a contact inside WhatsApp.", "warning");
+        return;
+    }
+
+    try { localStorage.setItem("dv_wa_number", rawNumber); } catch (e) {}
+
+    const url = "https://wa.me/" + phone + "?text=" + encodeURIComponent(buildShareText(1800));
+    const win = window.open(url, "_blank", "noopener");
+    if (!win) window.location.href = url;   // popup blocked -> open in this tab
+});
+
+$("shareFileBtn").addEventListener("click", async () => {
+    if (!hasReport()) {
+        showAlert("Run an analysis first, then share the full report.", "warning");
+        return;
+    }
+
+    const fullText = "DoctorVet AI — Examination Report\n" + new Date().toLocaleString() + "\n\n" + $("result").textContent.trim();
+    const file = new File([fullText], "doctorvet-ai-report.txt", { type: "text/plain" });
+
+    try {
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({ files: [file], title: "DoctorVet AI Report", text: buildShareText(500) });
+            return;
+        }
+        if (navigator.share) {
+            await navigator.share({ title: "DoctorVet AI Report", text: buildShareText(3500) });
+            return;
+        }
+    } catch (e) {
+        if (e && e.name === "AbortError") return;   // user closed the share sheet
+    }
+
+    // Fallback: download the file, then attach it in WhatsApp manually
+    const url = URL.createObjectURL(file);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = file.name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    showAlert("Your browser can't share files directly, so the report was downloaded. Attach it to a WhatsApp chat with the 📎 button.", "success");
+});
+
+/* ---------- KEYBOARD SHORTCUTS ---------- */
+
+document.addEventListener("keydown", (e) => {
+    const tag = (document.activeElement && document.activeElement.tagName) || "";
+    const typingInField = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+
+    if (e.ctrlKey && e.key.toLowerCase() === "u" && !typingInField) {
+        e.preventDefault();
+        $("fileInput").click();
+    }
+
+    if (e.ctrlKey && e.key === "Enter") {
+        e.preventDefault();
+        if (!$("analyzeBtn").disabled) $("analyzeBtn").click();
+    }
+});
+
+console.log("DoctorVet AI: all features initialized OK");
+
+} catch (initError) {
+    console.error("DoctorVet AI init failed:", initError);
+    document.body.insertAdjacentHTML(
+        "afterbegin",
+        '<div style="background:#fff1f0;color:#b42318;border-bottom:2px solid #f6c6c1;' +
+        'padding:14px 18px;font-family:monospace;font-size:13px;white-space:pre-wrap;">' +
+        '⚠️ DoctorVet AI failed to start — buttons will not work.\n' +
+        'Error: ' + initError.message +
+        '</div>'
+    );
+}
+});
+</script>
+
+</body>
+</html>
